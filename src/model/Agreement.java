@@ -9,7 +9,7 @@ public interface Agreement {
     /**
      * 用户相关操作码
      */
-    int REGISTER = 1001;
+    int  REGISTER = 1001;
     int USER_LOGIN = 1002;
     int EDIT_PROFILE = 1003;
     int AUTHENTICATE = 1004;
@@ -32,11 +32,20 @@ public interface Agreement {
     int REVIEW_CERTIFICATE = 2005;
     int REVIEW_REPORT = 2006;
 
+
     /**
      * 公共操作码
      */
     int VIEW_ACTIVITY = 3001;
     int VIEW_ACTIVITIES = 3002;
 
+
+    int SUCCESS = 4001;
+    /**
+     * 错误码
+     */
+    int NAME_ALREADY_EXISTS = 4002;
+    int PASSWORD_ERROR = 4003;
+    int ACCOUNT_NOT_EXIST = 4004;
 
 }

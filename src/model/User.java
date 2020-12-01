@@ -8,17 +8,32 @@ import java.io.Serializable;
 
 public class User implements Serializable {
     private int id;
-    private String pw;
     private String name;
+    private String pw;
     private String realName;
     private String idCard;
-    private int gender;
+    private String gender;
     private String contact;
-    private int certificate;
+    private String certificate;
+
+    public User(){
+
+    }
 
     public User(String name, String pw){
         this.name = name;
         this.pw = pw;
+    }
+
+    public User(int id, String name, String pw, String realName, String idCard, String gender, String contact, String certificate) {
+        this.id = id;
+        this.name = name;
+        this.pw = pw;
+        this.realName = realName;
+        this.idCard = idCard;
+        this.gender = gender;
+        this.contact = contact;
+        this.certificate = certificate;
     }
 
     public int getId() {
@@ -29,20 +44,20 @@ public class User implements Serializable {
         this.id = id;
     }
 
-    public String getPw() {
-        return pw;
-    }
-
-    public void setPw(String pw) {
-        this.pw = pw;
-    }
-
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getPw() {
+        return pw;
+    }
+
+    public void setPw(String pw) {
+        this.pw = pw;
     }
 
     public String getRealName() {
@@ -61,11 +76,11 @@ public class User implements Serializable {
         this.idCard = idCard;
     }
 
-    public int getGender() {
+    public String getGender() {
         return gender;
     }
 
-    public void setGender(int gender) {
+    public void setGender(String gender) {
         this.gender = gender;
     }
 
@@ -77,11 +92,11 @@ public class User implements Serializable {
         this.contact = contact;
     }
 
-    public int getCertificate() {
+    public String getCertificate() {
         return certificate;
     }
 
-    public void setCertificate(int certificate) {
+    public void setCertificate(String certificate) {
         this.certificate = certificate;
     }
 }

@@ -1,19 +1,25 @@
-import server.DBConnect;
+import model.Agreement;
+import model.Transfer;
+import model.User;
 
 import java.io.IOException;
-import java.sql.ResultSet;
+import java.nio.file.LinkOption;
 import java.sql.SQLException;
 
 /**
  * @author bqliang
  */
 
-public class Test {
-    public static void main(String[] args) throws SQLException, IOException, ClassNotFoundException {
-        ResultSet rs = DBConnect.getStat().executeQuery("SELECT sponsor FROM activity WHERE id = 1");
-        while (rs.next()){
-            String str = rs.getString("sponsor");
-            System.out.println(str);
-        }
+public class Test implements Agreement {
+    public static void main(String[] args) throws SQLException, IOException, ClassNotFoundException, InterruptedException {
+        User user = new User();
+        user.setId(2);
+        user.setRealName("梁斌强");
+        user.setIdCard("44098");
+        Transfer transfer = new Transfer();
+        transfer.setCommand(AUTHENTICATE);
+        transfer.setUser(user);
+        Commit.set(transfer);
+        Commit.start();
     }
 }
