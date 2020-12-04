@@ -49,6 +49,41 @@ public class ServerThread implements Runnable, Agreement {
                     break;
                 }
 
+                case CREATE_ACTIVITY:{
+                    feedback = DBHandler.createActivity(receive.getUser(),receive.getActivity());
+                    break;
+                }
+
+                case JOIN:{
+                    feedback = DBHandler.join(receive.getUser(),receive.getActivity());
+                    break;
+                }
+
+                case CHECK_IN:{
+                    feedback = DBHandler.checkIn(receive.getUser(), receive.getActivity());
+                    break;
+                }
+
+                case VIEW_ACTIVITY:{
+                    feedback = DBHandler.viewActivity(receive.getActivity());
+                    break;
+                }
+
+                case VIEW_USER:{
+                    feedback = DBHandler.viewUser(receive.getUser());
+                    break;
+                }
+
+                case VIEW_CERTIFICATE_USERS:{
+                    feedback = DBHandler.viewCertificateUsers();
+                    break;
+                }
+
+                case VIEW_ACTIVITIES:{
+                    feedback = DBHandler.viewActivities();
+                    break;
+                }
+
                 default:{
 
                 }

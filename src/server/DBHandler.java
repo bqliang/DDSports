@@ -10,6 +10,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DBHandler implements Agreement {
 
@@ -111,7 +113,7 @@ public class DBHandler implements Agreement {
         int id = user.getId();
         String realName = user.getRealName();
         String idCard = user.getIdCard();
-        String sql = "UPDATE user SET realname = '%s', idcard = '%s', certificate = '审核中' WHERE id = '%d'";
+        String sql = "UPDATE user SET realname = '%s', idcard = '%s', certificate = '待审核' WHERE id = '%d'";
         int affectedRow = stat.executeUpdate(String.format(sql,realName,idCard,id));
         Transfer transfer = new Transfer();
         transfer.setResult(SUCCESS);
@@ -197,7 +199,7 @@ public class DBHandler implements Agreement {
             transfer.setActivity(activity);
             transfer.setResult(SUCCESS);
         }else {
-            transfer.setResult(CHECKIN_FAIL);
+            transfer.setResult(CHECK_IN_FAIL);
         }
         return transfer;
     }
@@ -265,5 +267,61 @@ public class DBHandler implements Agreement {
     }
 
 
+    /**
+     * 浏览申请认证的用户
+     * @return
+     * @throws SQLException
+     */
+    public static Transfer viewCertificateUsers() throws SQLException {
+        Transfer transfer = new Transfer();
+        String sql = "SELECT * FROM user WHERE certificate = '待审核'";
+        ResultSet rs = stat.executeQuery(sql);
+        List<User> users = new ArrayList<User>();
+        while (rs.next()){
+            User user = new User(
+                    rs.getInt("id"),
+                    rs.getString("name"),
+                    " ",
+                    rs.getString("realname"),
+                    rs.getString("idcard"),
+                    rs.getString("gender"),
+                    rs.getString("contact"),
+                    rs.getString("certificate")
+            );
+            users.add(user);
+        }
+        transfer.setUserList(users);
+        return  transfer;
+    }
+
+
+    /**
+     * 浏览所有活动
+     * @return
+     * @throws SQLException
+     */
+    public static Transfer viewActivities() throws SQLException {
+        Transfer transfer = new Transfer();
+        String sql = "SELECT * FROM activity";
+        ResultSet rs = stat.executeQuery(sql);
+        List<Activity> activities = new ArrayList<Activity>();
+        while (rs.next()){
+            int id = rs.getInt("id");
+            String name = rs.getString("name");
+            String sponsor = rs.getString("sponsor");
+            Timestamp startTime = rs.getTimestamp("starttime");
+            Timestamp endTime = rs.getTimestamp("endtime");
+            String place = rs.getString("place");
+            int recruit = rs.getInt("recruit");
+            int join = rs.getInt("join");
+            int checkIn = rs.getInt("checkin");
+            String jusers = rs.getString("jusers");
+            String cusers = rs.getString("cusers");
+            Activity activity = new Activity(id,name,sponsor,startTime,endTime,place,recruit,join,checkIn,jusers,cusers);
+            activities.add(activity);
+        }
+        transfer.setActivityList(activities);
+        return transfer;
+    }
 
 }

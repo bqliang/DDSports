@@ -13,7 +13,7 @@ public interface Agreement {
     int USER_LOGIN = 1002;
     int EDIT_PROFILE = 1003;
     int AUTHENTICATE = 1004;
-    int INITIATE = 1005;
+    int CREATE_ACTIVITY = 1005;
     int CHANGE_INFO = 1006;
     int SEARCH = 1007;
     int JOIN = 1008;
@@ -31,6 +31,7 @@ public interface Agreement {
     int DELETE_ACTIVITY = 2004;
     int REVIEW_CERTIFICATE = 2005;
     int REVIEW_REPORT = 2006;
+    int VIEW_CERTIFICATE_USERS = 2007;
 
 
     /**
@@ -49,7 +50,7 @@ public interface Agreement {
     int ACCOUNT_NOT_EXIST = 4004;
     int CREATE_ACTIVITY_FAIL = 4005;
     int JOIN_FAIL = 4006;
-    int CHECKIN_FAIL = 4007;
+    int CHECK_IN_FAIL = 4007;
     int VIEW_ACTIVITY_FAIL = 4008;
     int VIEW_USER_FAIL = 4009;
 
