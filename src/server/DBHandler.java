@@ -324,4 +324,28 @@ public class DBHandler implements Agreement {
         return transfer;
     }
 
+
+    /**
+     * 审核认证
+     * @param ifPassCertification
+     * @return
+     * @throws SQLException
+     */
+    public static Transfer ReviewCertificate(Boolean ifPassCertification) throws SQLException {
+        Transfer transfer = new Transfer();
+        String sql = "UPDATE user SET certificate = '%s'";
+        if (ifPassCertification){
+            sql = String.format(sql,"审核通过");
+        }else {
+            String.format(sql,"审核失败");
+        }
+        int affectedRow = stat.executeUpdate(sql);
+        if (affectedRow == 1){
+            transfer.setResult(SUCCESS);
+        }else {
+            transfer.setResult(REVIEW_CERTIFICATE_FAIL);
+        }
+        return transfer;
+    }
+
 }

@@ -53,5 +53,6 @@ public interface Agreement {
     int CHECK_IN_FAIL = 4007;
     int VIEW_ACTIVITY_FAIL = 4008;
     int VIEW_USER_FAIL = 4009;
+    int REVIEW_CERTIFICATE_FAIL = 4010;
 
 }

@@ -16,6 +16,8 @@ public class Transfer implements Serializable {
     private List<User> userList;
     private List<Activity> activityList;
 
+    private Boolean ifPassCertification;
+
     public int getCommand() {
         return command;
     }
