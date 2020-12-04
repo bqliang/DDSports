@@ -47,5 +47,10 @@ public interface Agreement {
     int NAME_ALREADY_EXISTS = 4002;
     int PASSWORD_ERROR = 4003;
     int ACCOUNT_NOT_EXIST = 4004;
+    int CREATE_ACTIVITY_FAIL = 4005;
+    int JOIN_FAIL = 4006;
+    int CHECKIN_FAIL = 4007;
+    int VIEW_ACTIVITY_FAIL = 4008;
+    int VIEW_USER_FAIL = 4009;
 
 }

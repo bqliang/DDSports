@@ -1,5 +1,6 @@
 package server;
 
+import model.Activity;
 import model.Agreement;
 import model.Transfer;
 import model.User;
@@ -8,6 +9,7 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 
 public class DBHandler implements Agreement {
 
@@ -116,6 +118,152 @@ public class DBHandler implements Agreement {
         transfer.setUser(user);
         return transfer;
     }
+
+
+    /**
+     * 用户发起活动
+     * @param user
+     * @param activity
+     * @return
+     * @throws SQLException
+     */
+    public static Transfer createActivity(User user, Activity activity) throws SQLException {
+        Transfer transfer = new Transfer();
+        String activityName = activity.getName();
+        Timestamp startTime = activity.getStartTime();
+        Timestamp endTime = activity.getEndTime();
+        String place = activity.getPlace();
+        int recruit = activity.getRecruit();
+        String sponsor = user.getName();
+        String sql = "INSERT INTO activity (name,sponsor,starttime,endtime,place,recruit) VALUES ('%s','%s',%s,'%s','%s','%d')";
+        sql = String.format(sql,activityName,sponsor,startTime,endTime,place,recruit);
+        int affectedRow = stat.executeUpdate(sql);
+        if (affectedRow == 1){
+            transfer.setResult(SUCCESS);
+        }else {
+            transfer.setResult(CREATE_ACTIVITY_FAIL);
+        }
+        return transfer;
+    }
+
+
+    /**
+     * 用户加入活动
+     * @param user
+     * @param activity
+     * @return
+     * @throws SQLException
+     */
+    public static Transfer join(User user, Activity activity) throws SQLException {
+        Transfer transfer = new Transfer();
+        String name = user.getName();
+        int activityId = activity.getId();
+        int join = activity.getJoin() + 1;
+        String jusers = activity.getJusers() + name + " ";
+        String sql = "UPDATE activity SET join = %d, jusers = '%s' WHERE id = '%d'";
+        sql = String.format(sql,join,jusers,activityId);
+        int affectedRow = stat.executeUpdate(sql);
+        if (affectedRow == 1){
+            transfer.setResult(SUCCESS);
+            activity.setJoin(join);
+            activity.setJusers(jusers);
+            transfer.setActivity(activity);
+        }else {
+            transfer.setResult(JOIN_FAIL);
+        }
+        return transfer;
+    }
+
+
+    /**
+     * 用户打卡
+     * @param user
+     * @param activity
+     * @return
+     * @throws SQLException
+     */
+    public static Transfer checkIn(User user, Activity activity) throws SQLException {
+        Transfer transfer = new Transfer();
+        String name = user.getName();
+        int id = activity.getId();
+        int checkIn = activity.getCheckIn() + 1;
+        String cusers = activity.getCusers() + name + " ";
+        String sql  = "UPDATE activity set checkin = '%d', cusers = '%s' WHERE id = '%d'";
+        sql = String.format(sql,checkIn,cusers,id);
+        int affectedRow = stat.executeUpdate(sql);
+        if (affectedRow == 1){
+            activity.setCheckIn(checkIn);
+            activity.setCusers(cusers);
+            transfer.setActivity(activity);
+            transfer.setResult(SUCCESS);
+        }else {
+            transfer.setResult(CHECKIN_FAIL);
+        }
+        return transfer;
+    }
+
+
+    /**
+     * 浏览活动
+     * @param activity
+     * @return
+     * @throws SQLException
+     */
+    public static Transfer viewActivity(Activity activity) throws SQLException {
+        Transfer transfer = new Transfer();
+        int id = activity.getId();
+        String sql = "SELECT * FROM activity WHERE id = '%s'";
+        sql = String.format(sql,id);
+        ResultSet rs = stat.executeQuery(sql);
+        if (rs.next()){
+            String name = rs.getString("name");
+            String sponsor = rs.getString("sponsor");
+            Timestamp startTime = rs.getTimestamp("starttime");
+            Timestamp endTime = rs.getTimestamp("endtime");
+            String place = rs.getString("place");
+            int recruit = rs.getInt("recruit");
+            int join = rs.getInt("join");
+            int checkIn = rs.getInt("checkin");
+            String jusers = rs.getString("jusers");
+            String cusers = rs.getString("cusers");
+            activity = new Activity(id,name,sponsor,startTime,endTime,place,recruit,join,checkIn,jusers,cusers);
+            transfer.setActivity(activity);
+            transfer.setResult(SUCCESS);
+        }else {
+            transfer.setResult(VIEW_ACTIVITY_FAIL);
+        }
+        return transfer;
+    }
+
+
+    /**
+     * 查看用户资料
+     * @param user
+     * @return
+     * @throws SQLException
+     */
+    public static Transfer viewUser(User user) throws SQLException {
+        Transfer transfer = new Transfer();
+        int id = user.getId();
+        String sql = "SELECT * FROM user WHERE id ='%s'";
+        sql = String.format(sql,id);
+        ResultSet rs = stat.executeQuery(sql);
+        if (rs.next()){
+            String name = rs.getString("name");
+            String gender = rs.getString("gender");
+            String contact = rs.getString("contact");
+            String realName = rs.getString("realname");
+            String idCard = rs.getString("idcard");
+            String certificate = rs.getString("certificate");
+            user = new User(id,name," ",realName,idCard,gender,contact,certificate);
+            transfer.setUser(user);
+            transfer.setResult(SUCCESS);
+        }else {
+            transfer.setResult(VIEW_USER_FAIL);
+        }
+        return transfer;
+    }
+
 
 
 }
