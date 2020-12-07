@@ -84,6 +84,16 @@ public class ServerThread implements Runnable, Agreement {
                     break;
                 }
 
+                case SEND_LOGIN_CODE:{
+                    feedback = Email.send(receive.getUser().getEmail());
+                    break;
+                }
+
+                case LOGIN_BY_EMAIL:{
+
+                    break;
+                }
+
                 default:{
 
                 }

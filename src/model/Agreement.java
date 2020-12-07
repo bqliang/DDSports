@@ -9,7 +9,7 @@ public interface Agreement {
     /**
      * 用户相关操作码
      */
-    int  REGISTER = 1001;
+    int REGISTER = 1001;
     int USER_LOGIN = 1002;
     int EDIT_PROFILE = 1003;
     int AUTHENTICATE = 1004;
@@ -20,6 +20,10 @@ public interface Agreement {
     int CHECK_IN = 1009;
     int EXIT = 1010;
     int REPORT = 1011;
+    int SEND_LOGIN_CODE = 1012;
+    int LOGIN_BY_EMAIL = 1013;
+    int RETRIEVE_PASSWORD = 1014;
+    int RESET_PASSWORD = 1015;
 
 
     /**
@@ -54,5 +58,7 @@ public interface Agreement {
     int VIEW_ACTIVITY_FAIL = 4008;
     int VIEW_USER_FAIL = 4009;
     int REVIEW_CERTIFICATE_FAIL = 4010;
+    int EMAIL_NOT_EXISTS = 4011;
+    int EMAIL_ALREADY_EXISTS = 4012;
 
 }

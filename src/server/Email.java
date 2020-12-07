@@ -1,5 +1,7 @@
 package server;
 
+import model.Transfer;
+
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -8,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Properties;
+import java.util.Random;
 
 /**
  * @author bqliang
@@ -29,7 +32,9 @@ public class Email {
         }
     }
 
-    static public void send(String to, String code) throws MessagingException {
+    static public Transfer send(String to) throws MessagingException {
+
+        String code = getCode();
 
         Properties props = new Properties();
         // SMTP主机名
@@ -57,5 +62,18 @@ public class Email {
         message.setSubject("滴滴运动验证码登录", "UTF-8");
         message.setText("您好！验证码为："+code, "UTF-8");
         Transport.send(message);
+
+        Transfer transfer = new Transfer();
+        transfer.setCode(code);
+        return transfer;
+    }
+
+    static private String getCode(){
+        StringBuffer code = new StringBuffer();
+        Random random = new Random();
+        for (int i=0; i < 6 ; i++){
+            code.append(random.nextInt(10));
+        }
+        return code.toString();
     }
 }

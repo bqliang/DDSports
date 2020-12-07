@@ -16,6 +16,7 @@ public class Transfer implements Serializable {
     private List<User> userList;
     private List<Activity> activityList;
 
+    private String code;
     private Boolean ifPassCertification;
 
     public int getCommand() {
@@ -72,5 +73,21 @@ public class Transfer implements Serializable {
 
     public void setActivityList(List<Activity> activityList) {
         this.activityList = activityList;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public Boolean getIfPassCertification() {
+        return ifPassCertification;
+    }
+
+    public void setIfPassCertification(Boolean ifPassCertification) {
+        this.ifPassCertification = ifPassCertification;
     }
 }

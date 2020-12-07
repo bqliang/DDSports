@@ -15,6 +15,7 @@ public class User implements Serializable {
     private String gender;
     private String contact;
     private String certificate;
+    private String email;
 
     public User(){
 
@@ -25,7 +26,7 @@ public class User implements Serializable {
         this.pw = pw;
     }
 
-    public User(int id, String name, String pw, String realName, String idCard, String gender, String contact, String certificate) {
+    public User(int id, String name, String pw, String realName, String idCard, String gender, String contact, String certificate, String email) {
         this.id = id;
         this.name = name;
         this.pw = pw;
@@ -34,6 +35,7 @@ public class User implements Serializable {
         this.gender = gender;
         this.contact = contact;
         this.certificate = certificate;
+        this.email = email;
     }
 
     public int getId() {
@@ -98,5 +100,13 @@ public class User implements Serializable {
 
     public void setCertificate(String certificate) {
         this.certificate = certificate;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

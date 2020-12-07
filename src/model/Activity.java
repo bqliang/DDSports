@@ -34,6 +34,19 @@ public class Activity implements Serializable {
         this.cusers = cusers;
     }
 
+    public Activity(String name, String sponsor, Timestamp startTime, Timestamp endTime, String place, int recruit) {
+        this.name = name;
+        this.sponsor = sponsor;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.place = place;
+        this.recruit = recruit;
+        this.join = join;
+        this.checkIn = checkIn;
+        this.jusers = jusers;
+        this.cusers = cusers;
+    }
+
     public int getId() {
         return id;
     }

@@ -11,6 +11,11 @@ public class Admin implements Serializable {
     private String pw;
     private String name;
 
+    public Admin(String name,String pw) {
+        this.pw = pw;
+        this.name = name;
+    }
+
     public Admin(int id, String pw, String name) {
         this.id = id;
         this.pw = pw;

@@ -1,9 +1,13 @@
+import model.Activity;
+import model.User;
 import server.DBConnect;
+import server.DBHandler;
 
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 
 public class ServerTest {
     public static void main(String[] args) throws SQLException, IOException, ClassNotFoundException {
@@ -17,7 +21,15 @@ public class ServerTest {
 //            System.out.println(row);
 //        }
 
-        ResultSet rs = statement.executeQuery("SELECT * FROM admin WHERE name = 'xuziqi'");
-        System.out.println(rs.next());
+        DBHandler.createActivity(
+                new User("bqliang","paw"),
+                new Activity("羽毛球",
+                        "梁斌强",
+                        new Timestamp(System.currentTimeMillis()),
+                        new Timestamp(System.currentTimeMillis()),
+                        "中山大学南方学院",
+                        10
+                )
+        );
     }
 }
