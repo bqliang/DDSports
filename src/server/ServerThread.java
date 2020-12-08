@@ -44,6 +44,11 @@ public class ServerThread implements Runnable, Agreement {
                     break;
                 }
 
+                case ADMIN_LOGIN:{
+                    feedback = DBHandler.adminLogin(receive.getAdmin());
+                    break;
+                }
+
                 case AUTHENTICATE:{
                     feedback = DBHandler.authenticate(receive.getUser());
                     break;
@@ -85,12 +90,12 @@ public class ServerThread implements Runnable, Agreement {
                 }
 
                 case SEND_LOGIN_CODE:{
-                    feedback = Email.send(receive.getUser().getEmail());
+                    feedback = DBHandler.sendLoginCode(receive.getUser());
                     break;
                 }
 
                 case LOGIN_BY_EMAIL:{
-
+                    feedback = DBHandler.loginByCode(receive.getUser());
                     break;
                 }
 

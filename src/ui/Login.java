@@ -16,11 +16,16 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 
+/**
+ * @author bqliang
+ */
+
 public class Login extends JFrame implements Agreement {
 
 	private JPanel contentPane;
 	private JTextField accountInput;
 	private JPasswordField passwordInput;
+	static private Login frame;
 
 	/**
 	 * Launch the application.
@@ -30,9 +35,7 @@ public class Login extends JFrame implements Agreement {
 			@Override
 			public void run() {
 				try {
-					Login frame = new Login();
-					frame.setVisible(true);
-					frame.setLocationRelativeTo(null);
+					frame = new Login();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -47,6 +50,7 @@ public class Login extends JFrame implements Agreement {
 		setTitle("\u6EF4\u6EF4\u8FD0\u52A8");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 600, 430);
+		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -108,6 +112,17 @@ public class Login extends JFrame implements Agreement {
 		loginByCode.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				new EmailLogin(frame);
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				loginByCode.setForeground(new Color(30, 144, 255));
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				loginByCode.setForeground(new Color(242, 142, 30));
 			}
 		});
 		loginByCode.setToolTipText("使用邮箱验证码登录账号");
@@ -127,6 +142,7 @@ public class Login extends JFrame implements Agreement {
 		registerButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				// 跳转注册页面
 			}
 		});
 		registerButton.setForeground(new Color(242, 142, 30));
@@ -168,6 +184,11 @@ public class Login extends JFrame implements Agreement {
 
 				if (result == SUCCESS){
 					// 登录成功
+					if(isAdmin.isSelected()){
+
+					}else {
+
+					}
 				}else if(result == ACCOUNT_NOT_EXIST){
 					JOptionPane.showMessageDialog(null, "请检查后重试", "账号不存在", JOptionPane.ERROR_MESSAGE);
 				}else if (result == PASSWORD_ERROR){
@@ -192,11 +213,28 @@ public class Login extends JFrame implements Agreement {
 		contentPane.add(buttonInfoLabel);
 		
 		JLabel forgetPassword = new JLabel("\u5FD8\u8BB0\u5BC6\u7801\uFF1F\u7ACB\u5373\u627E\u56DE");
+		forgetPassword.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// 找回密码
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				forgetPassword.setForeground(new Color(30, 144, 255));
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				forgetPassword.setForeground(new Color(242, 142, 30));
+			}
+		});
 		forgetPassword.setHorizontalAlignment(SwingConstants.CENTER);
 		forgetPassword.setHorizontalTextPosition(SwingConstants.CENTER);
 		forgetPassword.setForeground(new Color(242, 142, 30));
 		forgetPassword.setFont(new Font("微软雅黑", Font.PLAIN, 14));
 		forgetPassword.setBounds(108, 319, 369, 43);
 		contentPane.add(forgetPassword);
+		setVisible(true);
 	}
 }

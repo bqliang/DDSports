@@ -1,3 +1,4 @@
+import client.Tools;
 import model.Agreement;
 import server.DBConnect;
 
@@ -12,8 +13,5 @@ import java.sql.Timestamp;
 public class Test implements Agreement {
     public static void main(String[] args) throws SQLException, IOException, ClassNotFoundException, InterruptedException {
 
-        DBConnect.getStat().execute(String.format(
-                "INSERT INTO test (time) VALUES ('%s')",
-                new Timestamp(System.currentTimeMillis())));
     }
 }

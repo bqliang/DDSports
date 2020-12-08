@@ -1,18 +1,18 @@
 package server;
 
-import model.Activity;
-import model.Agreement;
-import model.Transfer;
-import model.User;
+import model.*;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+
+/**
+ * @author bqliang
+ */
 
 public class DBHandler implements Agreement {
 
@@ -95,7 +95,32 @@ public class DBHandler implements Agreement {
 
 
     /**
-     * 用户邮箱登录
+     * 管理员登录
+     * @param admin
+     * @return
+     * @throws SQLException
+     */
+    public static Transfer adminLogin(Admin admin) throws SQLException {
+        Transfer feedback = new Transfer();
+        ResultSet rs = stat.executeQuery(String.format("SELECT * FROM admin WHERE name = '%s'",admin.getName()));
+        if (rs.next()){
+            String pw = rs.getString("password");
+            if (admin.getPw().equals(pw)){
+                admin.setId(rs.getInt("id"));
+                feedback.setResult(SUCCESS);
+                feedback.setAdmin(admin);
+            }else {
+                feedback.setResult(PASSWORD_ERROR);
+            }
+        }else {
+            feedback.setResult(ACCOUNT_NOT_EXIST);
+        }
+        return feedback;
+    }
+
+
+    /**
+     * 发送登录验证码
      * @param user
      * @return
      * @throws SQLException
@@ -112,6 +137,23 @@ public class DBHandler implements Agreement {
             transfer.setResult(EMAIL_NOT_EXISTS);
         }
         return transfer;
+    }
+
+
+    public static Transfer loginByCode(User user) throws SQLException {
+        Transfer feedback = new Transfer();
+        ResultSet rs = stat.executeQuery(String.format("SELECT * FROM user WHERE email = '%s'",user.getEmail()));
+        rs.next();
+        user.setId(rs.getInt("id"));
+        user.setGender(rs.getString("gender"));
+        user.setContact(rs.getString("contact"));
+        user.setRealName(rs.getString("realname"));
+        user.setIdCard(rs.getString("idcard"));
+        user.setCertificate(rs.getString("certificate"));
+        user.setEmail(rs.getString("email"));
+        feedback.setResult(SUCCESS);
+        feedback.setUser(user);
+        return feedback;
     }
 
 

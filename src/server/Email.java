@@ -1,5 +1,6 @@
 package server;
 
+import model.Agreement;
 import model.Transfer;
 
 import javax.mail.*;
@@ -16,7 +17,7 @@ import java.util.Random;
  * @author bqliang
  */
 
-public class Email {
+public class Email implements Agreement {
 
     static final String smtp = "smtp.office365.com";
     static final String username = "ddsports2020@outlook.com";
@@ -59,12 +60,13 @@ public class Email {
         MimeMessage message = new MimeMessage(session);
         message.setFrom(new InternetAddress("ddsports2020@outlook.com"));
         message.setRecipient(Message.RecipientType.TO, new InternetAddress(to));
-        message.setSubject("滴滴运动验证码登录", "UTF-8");
-        message.setText("您好！验证码为："+code, "UTF-8");
+        message.setSubject("滴滴运动验证码", "UTF-8");
+        message.setText("您好！验证码为："+ code + "，请不要将验证码透露给任何人，官方人员不会以任何理由向您索取验证码。", "UTF-8");
         Transport.send(message);
 
         Transfer transfer = new Transfer();
         transfer.setCode(code);
+        transfer.setResult(SUCCESS);
         return transfer;
     }
 
