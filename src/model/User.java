@@ -10,32 +10,86 @@ public class User implements Serializable {
     private int id;
     private String name;
     private String pw;
-    private String realName;
-    private String idCard;
     private String gender;
     private String contact;
-    private String certificate;
     private String email;
+    private String realName;
+    private String idCard;
+    private String certificate;
 
     public User(){
-
     }
 
-    public User(String name, String pw){
+    /**
+     * 登录用
+     * @param name
+     * @param pw
+     */
+    public User(String name, String pw) {
         this.name = name;
         this.pw = pw;
     }
 
-    public User(int id, String name, String pw, String realName, String idCard, String gender, String contact, String certificate, String email) {
+    /**
+     * 注册用
+     * @param name
+     * @param pw
+     * @param gender
+     * @param contact
+     * @param email
+     */
+    public User(String name, String pw, String gender, String contact, String email) {
+        this.name = name;
+        this.pw = pw;
+        this.gender = gender;
+        this.contact = contact;
+        this.email = email;
+    }
+
+    /**
+     * 无密码构造方法
+     * @param id
+     * @param name
+     * @param gender
+     * @param contact
+     * @param email
+     * @param realName
+     * @param idCard
+     * @param certificate
+     */
+    public User(int id, String name, String gender, String contact, String email, String realName, String idCard, String certificate) {
+        this.id = id;
+        this.name = name;
+        this.gender = gender;
+        this.contact = contact;
+        this.email = email;
+        this.realName = realName;
+        this.idCard = idCard;
+        this.certificate = certificate;
+    }
+
+    /**
+     * 完全构造方法
+     * @param id
+     * @param name
+     * @param pw
+     * @param gender
+     * @param contact
+     * @param email
+     * @param realName
+     * @param idCard
+     * @param certificate
+     */
+    public User(int id, String name, String pw, String gender, String contact, String email, String realName, String idCard, String certificate) {
         this.id = id;
         this.name = name;
         this.pw = pw;
-        this.realName = realName;
-        this.idCard = idCard;
         this.gender = gender;
         this.contact = contact;
-        this.certificate = certificate;
         this.email = email;
+        this.realName = realName;
+        this.idCard = idCard;
+        this.certificate = certificate;
     }
 
     public int getId() {
@@ -62,22 +116,6 @@ public class User implements Serializable {
         this.pw = pw;
     }
 
-    public String getRealName() {
-        return realName;
-    }
-
-    public void setRealName(String realName) {
-        this.realName = realName;
-    }
-
-    public String getIdCard() {
-        return idCard;
-    }
-
-    public void setIdCard(String idCard) {
-        this.idCard = idCard;
-    }
-
     public String getGender() {
         return gender;
     }
@@ -94,19 +132,35 @@ public class User implements Serializable {
         this.contact = contact;
     }
 
-    public String getCertificate() {
-        return certificate;
-    }
-
-    public void setCertificate(String certificate) {
-        this.certificate = certificate;
-    }
-
     public String getEmail() {
         return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
+
+    public String getIdCard() {
+        return idCard;
+    }
+
+    public void setIdCard(String idCard) {
+        this.idCard = idCard;
+    }
+
+    public String getCertificate() {
+        return certificate;
+    }
+
+    public void setCertificate(String certificate) {
+        this.certificate = certificate;
     }
 }

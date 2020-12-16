@@ -18,6 +18,7 @@ public class Transfer implements Serializable {
 
     private String code;
     private Boolean ifPassCertification;
+    private String sql;
 
     public int getCommand() {
         return command;
@@ -89,5 +90,13 @@ public class Transfer implements Serializable {
 
     public void setIfPassCertification(Boolean ifPassCertification) {
         this.ifPassCertification = ifPassCertification;
+    }
+
+    public String getSql() {
+        return sql;
+    }
+
+    public void setSql(String sql) {
+        this.sql = sql;
     }
 }

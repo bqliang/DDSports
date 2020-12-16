@@ -1,6 +1,8 @@
 package ui;
 
 import client.Commit;
+import client.Logined;
+import client.Tools;
 import model.Admin;
 import model.Agreement;
 import model.Transfer;
@@ -142,7 +144,7 @@ public class Login extends JFrame implements Agreement {
 		registerButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// 跳转注册页面
+				new Register(frame);
 			}
 		});
 		registerButton.setForeground(new Color(242, 142, 30));
@@ -183,7 +185,15 @@ public class Login extends JFrame implements Agreement {
 				}
 
 				if (result == SUCCESS){
-					// 登录成功
+					try {
+						// 打开活动列表
+						new UserViewActivities();
+						frame.dispose();
+					} catch (IOException | ClassNotFoundException ioException) {
+						ioException.printStackTrace();
+					}
+					// 将登录成功的用户信息保存
+					Logined.setUser(feedback.getUser());
 					if(isAdmin.isSelected()){
 
 					}else {
@@ -205,18 +215,19 @@ public class Login extends JFrame implements Agreement {
 		loginButton.setBounds(209, 5, 109, 45);
 		buttonPanel.add(loginButton);
 		
-		JLabel buttonInfoLabel = new JLabel("Copyright \u00A9 2020    996\u5F00\u53D1\u7EC4");
+		JLabel buttonInfoLabel = new JLabel("Copyright \u00A9 2020    996开发组");
 		buttonInfoLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		buttonInfoLabel.setForeground(Color.DARK_GRAY);
 		buttonInfoLabel.setFont(new Font("等线 Light", Font.PLAIN, 15));
 		buttonInfoLabel.setBounds(179, 368, 218, 25);
 		contentPane.add(buttonInfoLabel);
 		
-		JLabel forgetPassword = new JLabel("\u5FD8\u8BB0\u5BC6\u7801\uFF1F\u7ACB\u5373\u627E\u56DE");
+		JLabel forgetPassword = new JLabel("忘记密码？立即找回");
 		forgetPassword.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				// 找回密码
+				// 点击找回密码
+				new RetrievePassword(frame);
 			}
 
 			@Override

@@ -72,7 +72,7 @@ public class EmailLogin extends JFrame implements Agreement {
 				}
 				Transfer transfer = new Transfer();
 				Transfer feedback = new Transfer();
-				transfer.setCommand(SEND_LOGIN_CODE);
+				transfer.setCommand(SEND_CODE);
 				User user = new User();
 				user.setEmail(emailInput.getText());
 				transfer.setUser(user);
@@ -164,10 +164,6 @@ public class EmailLogin extends JFrame implements Agreement {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// 登录
-				if(emailInput.getText() == null){
-					JOptionPane.showMessageDialog(null, "请检查后重试", "您似乎还未输入邮箱", JOptionPane.ERROR_MESSAGE);
-					return;
-				}
 				if(codeInput.getText() == null){
 					JOptionPane.showMessageDialog(null, "请检查后重试", "您似乎还未输入验证码", JOptionPane.ERROR_MESSAGE);
 					return;
@@ -186,11 +182,15 @@ public class EmailLogin extends JFrame implements Agreement {
 						ioException.printStackTrace();
 					}
 					Logined.setUser(feedback.getUser());
-					// 登录成功
+					try {
+						new UserViewActivities();
+						close();
+					} catch (IOException | ClassNotFoundException ioException) {
+						ioException.printStackTrace();
+					}
 				}else {
 					JOptionPane.showMessageDialog(null, "请检查后重试", "验证码错误", JOptionPane.ERROR_MESSAGE);
 				}
-
 			}
 		});
 		loginButton.setBounds(141, 179, 153, 43);
@@ -199,6 +199,10 @@ public class EmailLogin extends JFrame implements Agreement {
 
 	private void closeWindow(){
 		login.setVisible(true);
+		this.dispose();
+	}
+
+	private void close(){
 		this.dispose();
 	}
 }

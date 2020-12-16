@@ -13,7 +13,7 @@ import java.util.List;
  * @author bqliang 数据库连接
  */
 
-public class DBConnect {
+public class DbConnect {
 
     static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
     private static Statement statement;

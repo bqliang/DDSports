@@ -33,69 +33,78 @@ public class ServerThread implements Runnable, Agreement {
 
             switch (receive.getCommand()){
                 case REGISTER:{
-                    User user = receive.getUser();
-                    feedback = DBHandler.register(user);
+                    feedback = DbHandler.register(receive.getUser());
                     break;
                 }
 
                 case USER_LOGIN:{
                     User user = receive.getUser();
-                    feedback = DBHandler.userLogin(user);
+                    feedback = DbHandler.userLogin(user);
                     break;
                 }
 
                 case ADMIN_LOGIN:{
-                    feedback = DBHandler.adminLogin(receive.getAdmin());
+                    feedback = DbHandler.adminLogin(receive.getAdmin());
                     break;
                 }
 
                 case AUTHENTICATE:{
-                    feedback = DBHandler.authenticate(receive.getUser());
+                    feedback = DbHandler.authenticate(receive.getUser());
                     break;
                 }
 
                 case CREATE_ACTIVITY:{
-                    feedback = DBHandler.createActivity(receive.getUser(),receive.getActivity());
+                    feedback = DbHandler.createActivity(receive.getUser(),receive.getActivity());
                     break;
                 }
 
                 case JOIN:{
-                    feedback = DBHandler.join(receive.getUser(),receive.getActivity());
+                    feedback = DbHandler.join(receive.getUser(),receive.getActivity());
                     break;
                 }
 
                 case CHECK_IN:{
-                    feedback = DBHandler.checkIn(receive.getUser(), receive.getActivity());
+                    feedback = DbHandler.checkIn(receive.getUser(), receive.getActivity());
                     break;
                 }
 
                 case VIEW_ACTIVITY:{
-                    feedback = DBHandler.viewActivity(receive.getActivity());
+                    feedback = DbHandler.viewActivity(receive.getActivity());
                     break;
                 }
 
                 case VIEW_USER:{
-                    feedback = DBHandler.viewUser(receive.getUser());
+                    feedback = DbHandler.viewUser(receive.getUser());
                     break;
                 }
 
                 case VIEW_CERTIFICATE_USERS:{
-                    feedback = DBHandler.viewCertificateUsers();
+                    feedback = DbHandler.viewCertificateUsers();
                     break;
                 }
 
                 case VIEW_ACTIVITIES:{
-                    feedback = DBHandler.viewActivities();
+                    feedback = DbHandler.viewActivities();
                     break;
                 }
 
-                case SEND_LOGIN_CODE:{
-                    feedback = DBHandler.sendLoginCode(receive.getUser());
+                case SEND_CODE:{
+                    feedback = DbHandler.sendLoginCode(receive.getUser());
                     break;
                 }
 
                 case LOGIN_BY_EMAIL:{
-                    feedback = DBHandler.loginByCode(receive.getUser());
+                    feedback = DbHandler.loginByCode(receive.getUser());
+                    break;
+                }
+
+                case FILTER_ACTIVITIES:{
+                    feedback = DbHandler.filterActivities(receive.getSql());
+                    break;
+                }
+
+                case RETRIEVE_PASSWORD:{
+                    feedback = DbHandler.retrievePassword(receive.getUser());
                     break;
                 }
 

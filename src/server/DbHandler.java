@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,13 +15,13 @@ import java.util.List;
  * @author bqliang
  */
 
-public class DBHandler implements Agreement {
+public class DbHandler implements Agreement {
 
     static public Statement stat;
 
     static {
         try {
-            stat = DBConnect.getStat();
+            stat = DbConnect.getStat();
         } catch (SQLException | ClassNotFoundException | IOException e) {
             e.printStackTrace();
         }
@@ -28,7 +29,7 @@ public class DBHandler implements Agreement {
 
 
     /**
-     * 注册
+     * 用户注册
      * @param user
      * @return
      * @throws SQLException
@@ -55,7 +56,7 @@ public class DBHandler implements Agreement {
         // 获取id并返回
         ResultSet idRs = stat.executeQuery(String.format("SELECT id FROM user WHERE name = '%s'",user.getName()));
         idRs.next();
-        user.setId(emailRs.getInt("id"));
+        user.setId(idRs.getInt("id"));
         user.setCertificate("未审核");
         feedback.setResult(SUCCESS);
         feedback.setUser(user);
@@ -85,9 +86,11 @@ public class DBHandler implements Agreement {
                 feedback.setResult(SUCCESS);
                 feedback.setUser(user);
             }else {
+                // 用户存在，但密码不正确
                 feedback.setResult(PASSWORD_ERROR);
             }
         }else {
+            // 用户不存在
             feedback.setResult(ACCOUNT_NOT_EXIST);
         }
         return feedback;
@@ -120,7 +123,7 @@ public class DBHandler implements Agreement {
 
 
     /**
-     * 发送登录验证码
+     * 发送验证码
      * @param user
      * @return
      * @throws SQLException
@@ -140,19 +143,29 @@ public class DBHandler implements Agreement {
     }
 
 
+    /**
+     * 邮箱登录成功，返回数据
+     * @param user
+     * @return
+     * @throws SQLException
+     */
     public static Transfer loginByCode(User user) throws SQLException {
         Transfer feedback = new Transfer();
         ResultSet rs = stat.executeQuery(String.format("SELECT * FROM user WHERE email = '%s'",user.getEmail()));
         rs.next();
-        user.setId(rs.getInt("id"));
-        user.setGender(rs.getString("gender"));
-        user.setContact(rs.getString("contact"));
-        user.setRealName(rs.getString("realname"));
-        user.setIdCard(rs.getString("idcard"));
-        user.setCertificate(rs.getString("certificate"));
-        user.setEmail(rs.getString("email"));
+        feedback.setUser(
+                new User(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("gender"),
+                        rs.getString("contact"),
+                        rs.getString("email"),
+                        rs.getString("realname"),
+                        rs.getString("idcard"),
+                        rs.getString("certificate")
+                        )
+        );
         feedback.setResult(SUCCESS);
-        feedback.setUser(user);
         return feedback;
     }
 
@@ -169,7 +182,6 @@ public class DBHandler implements Agreement {
                 user.getRealName(), user.getIdCard(), user.getId())
         );
         feedback.setResult(SUCCESS);
-        feedback.setUser(user);
         return feedback;
     }
 
@@ -183,13 +195,13 @@ public class DBHandler implements Agreement {
      */
     public static Transfer createActivity(User user, Activity activity) throws SQLException {
         Transfer feedback = new Transfer();
-        String sql = String.format("INSERT INTO activity (name,sponsor,starttime,endtime,place,recruit) VALUES ('%s','%s','%s','%s','%s',%d)",
-                activity.getName(), user.getName(), activity.getStartTime(), activity.getEndTime(), activity.getPlace(), activity.getRecruit());
+        String sql = String.format("INSERT INTO activity (name,sponsor,time,duration,place,postscript,recruit) VALUES ('%s','%s','%s',%f,'%s','%s',%d)",
+                activity.getName(), user.getName(), activity.getTime(), activity.getDuration(), activity.getPlace(), activity.getRecruit());
         int affectedRow = stat.executeUpdate(sql);
         if (affectedRow == 1){
             // 获取id
             ResultSet rs = stat.executeQuery(String.format("SELECT id FROM activity where name = '%s' AND sponsor = '%s' AND starttime ='%s' AND endtime = '%s'",
-                    activity.getName(), activity.getSponsor(), activity.getStartTime(), activity.getEndTime()));
+                    activity.getName(), activity.getSponsor(), activity.getTime(), activity.getDuration()));
             rs.next();
             int id = rs.getInt("id");
             String setStatus = "CREATE EVENT set%sStatus%d\n" +
@@ -197,9 +209,9 @@ public class DBHandler implements Agreement {
                     "    DO\n" +
                     "      UPDATE activity SET status = '%s' WHERE id = %d;";
             stat.execute(String.format(setStatus,
-                    "Start", id, activity.getStartTime(), "已开始"), id);
+                    "Start", id, activity.getTime(), "已开始"), id);
             stat.execute(String.format(setStatus,
-                    "End", id, activity.getEndTime(), "已结束"), id);
+                    "End", id, new Timestamp((long) (activity.getTime().getTime() + (activity.getDuration() * 3600000))), "已结束"), id);
             feedback.setResult(SUCCESS);
         }else {
             feedback.setResult(CREATE_ACTIVITY_FAIL);
@@ -218,13 +230,13 @@ public class DBHandler implements Agreement {
     public static Transfer join(User user, Activity activity) throws SQLException {
         Transfer feedback = new Transfer();
         int join = activity.getJoin() + 1;
-        String jUsers = activity.getJusers() + user.getName() + " ";
+        String jUsers = activity.getjUsers() + user.getName() + " ";
         int affectedRow = stat.executeUpdate(String.format("UPDATE activity SET join = %d, jusers = '%s' WHERE id = %d",
                 join,jUsers, activity.getId()));
         if (affectedRow == 1){
             feedback.setResult(SUCCESS);
             activity.setJoin(join);
-            activity.setJusers(jUsers);
+            activity.setjUsers(jUsers);
             feedback.setActivity(activity);
         }else {
             feedback.setResult(JOIN_FAIL);
@@ -243,12 +255,12 @@ public class DBHandler implements Agreement {
     public static Transfer checkIn(User user, Activity activity) throws SQLException {
         Transfer feedback = new Transfer();
         int checkIn = activity.getCheckIn() + 1;
-        String cusers = activity.getCusers() + user.getName() + " ";
+        String cusers = activity.getcUsers() + user.getName() + " ";
         int affectedRow = stat.executeUpdate(String.format("UPDATE activity set checkin = %d, cusers = '%s' WHERE id = %d",
                 checkIn,cusers,activity.getId()));
         if (affectedRow == 1){
             activity.setCheckIn(checkIn);
-            activity.setCusers(cusers);
+            activity.setcUsers(cusers);
             feedback.setActivity(activity);
             feedback.setResult(SUCCESS);
         }else {
@@ -273,14 +285,16 @@ public class DBHandler implements Agreement {
                             activity.getId(),
                             rs.getString("name"),
                             rs.getString("sponsor"),
-                            rs.getTimestamp("starttime"),
-                            rs.getTimestamp("endtime"),
+                            rs.getTimestamp("time"),
+                            rs.getFloat("duration"),
                             rs.getString("place"),
+                            rs.getString("postscript"),
                             rs.getInt("recruit"),
                             rs.getInt("join"),
-                            rs.getInt("checkin"),
                             rs.getString("jusers"),
-                            rs.getString("cusers")
+                            rs.getInt("checkin"),
+                            rs.getString("cusers"),
+                            rs.getString("status")
                     )
             );
             feedback.setResult(SUCCESS);
@@ -366,14 +380,16 @@ public class DBHandler implements Agreement {
                             rs.getInt("id"),
                             rs.getString("name"),
                             rs.getString("sponsor"),
-                            rs.getTimestamp("starttime"),
-                            rs.getTimestamp("endtime"),
+                            rs.getTimestamp("time"),
+                            rs.getFloat("duration"),
                             rs.getString("place"),
+                            rs.getString("postscript"),
                             rs.getInt("recruit"),
                             rs.getInt("join"),
-                            rs.getInt("checkin"),
                             rs.getString("jusers"),
-                            rs.getString("cusers")
+                            rs.getInt("checkin"),
+                            rs.getString("cusers"),
+                            rs.getString("status")
                     )
             );
         }
@@ -382,6 +398,52 @@ public class DBHandler implements Agreement {
         return feedback;
     }
 
+
+    /**
+     * 用户筛选活动
+     * @param sql
+     * @return
+     * @throws SQLException
+     */
+    public static Transfer filterActivities(String sql) throws SQLException {
+        Transfer feedback = new Transfer();
+        ResultSet rs = stat.executeQuery(sql);
+        List<Activity> activities = new ArrayList<Activity>();
+        while (rs.next()){
+            activities.add(
+                    new Activity(
+                            rs.getInt("id"),
+                            rs.getString("name"),
+                            rs.getString("sponsor"),
+                            rs.getTimestamp("time"),
+                            rs.getFloat("duration"),
+                            rs.getString("place"),
+                            rs.getString("postscript"),
+                            rs.getInt("recruit"),
+                            rs.getInt("join"),
+                            rs.getString("jusers"),
+                            rs.getInt("checkin"),
+                            rs.getString("cusers"),
+                            rs.getString("status")
+                    )
+            );
+        }
+        feedback.setResult(SUCCESS);
+        feedback.setActivityList(activities);
+        return feedback;
+    }
+
+
+    public static Transfer retrievePassword(User user) throws SQLException {
+        Transfer feedback = new Transfer();
+        int affectedRow = stat.executeUpdate(String.format("UPDATE user SET password = '%s' WHERE email = '%s'", user.getPw(), user.getEmail()));
+        if (affectedRow == 1){
+            feedback.setResult(SUCCESS);
+        }else {
+            feedback.setResult(RETRIEVE_PASSWORD_FAIL);
+        }
+        return feedback;
+    }
 
 
 

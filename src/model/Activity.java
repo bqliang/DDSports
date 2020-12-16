@@ -11,40 +11,67 @@ public class Activity implements Serializable {
     private int id;
     private String name;
     private String sponsor;
-    private Timestamp startTime;
-    private Timestamp endTime;
+    private Timestamp time;
+    private float duration;
     private String place;
+    private String postscript;
     private int recruit;
     private int join;
+    private String jUsers;
     private int checkIn;
-    private String jusers;
-    private String cusers;
+    private String cUsers;
+    private String status;
 
-    public Activity(int id, String name, String sponsor, Timestamp startTime, Timestamp endTime, String place, int recruit, int join, int checkIn, String jusers, String cusers) {
+    /**
+     * 用于发起活动的构造方法
+     * @param name 活动名
+     * @param sponsor 发起人
+     * @param time 开始时间
+     * @param duration 持续时间（小时）
+     * @param place 地点
+     * @param postscript 备注
+     * @param recruit 招募人数
+     */
+    public Activity(String name, String sponsor, Timestamp time, float duration, String place, String postscript, int recruit) {
+        this.name = name;
+        this.sponsor = sponsor;
+        this.time = time;
+        this.duration = duration;
+        this.place = place;
+        this.postscript = postscript;
+        this.recruit = recruit;
+    }
+
+    /**
+     * 完全构造方法
+     * @param id 活动ID
+     * @param name 活动名
+     * @param sponsor 发起人
+     * @param time 开始时间
+     * @param duration 持续时间（小时）
+     * @param place 地点
+     * @param postscript 备注
+     * @param recruit 招募人数
+     * @param join 报名人数
+     * @param jUsers 报名人员
+     * @param checkIn 打卡人数
+     * @param cUsers 打卡人员
+     * @param status 活动状态
+     */
+    public Activity(int id, String name, String sponsor, Timestamp time, float duration, String place, String postscript, int recruit, int join, String jUsers, int checkIn, String cUsers, String status) {
         this.id = id;
         this.name = name;
         this.sponsor = sponsor;
-        this.startTime = startTime;
-        this.endTime = endTime;
+        this.time = time;
+        this.duration = duration;
         this.place = place;
+        this.postscript = postscript;
         this.recruit = recruit;
         this.join = join;
+        this.jUsers = jUsers;
         this.checkIn = checkIn;
-        this.jusers = jusers;
-        this.cusers = cusers;
-    }
-
-    public Activity(String name, String sponsor, Timestamp startTime, Timestamp endTime, String place, int recruit) {
-        this.name = name;
-        this.sponsor = sponsor;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.place = place;
-        this.recruit = recruit;
-        this.join = join;
-        this.checkIn = checkIn;
-        this.jusers = jusers;
-        this.cusers = cusers;
+        this.cUsers = cUsers;
+        this.status = status;
     }
 
     public int getId() {
@@ -71,20 +98,20 @@ public class Activity implements Serializable {
         this.sponsor = sponsor;
     }
 
-    public Timestamp getStartTime() {
-        return startTime;
+    public Timestamp getTime() {
+        return time;
     }
 
-    public void setStartTime(Timestamp startTime) {
-        this.startTime = startTime;
+    public void setTime(Timestamp time) {
+        this.time = time;
     }
 
-    public Timestamp getEndTime() {
-        return endTime;
+    public float getDuration() {
+        return duration;
     }
 
-    public void setEndTime(Timestamp endTime) {
-        this.endTime = endTime;
+    public void setDuration(float duration) {
+        this.duration = duration;
     }
 
     public String getPlace() {
@@ -93,6 +120,14 @@ public class Activity implements Serializable {
 
     public void setPlace(String place) {
         this.place = place;
+    }
+
+    public String getPostscript() {
+        return postscript;
+    }
+
+    public void setPostscript(String postscript) {
+        this.postscript = postscript;
     }
 
     public int getRecruit() {
@@ -111,6 +146,14 @@ public class Activity implements Serializable {
         this.join = join;
     }
 
+    public String getjUsers() {
+        return jUsers;
+    }
+
+    public void setjUsers(String jUsers) {
+        this.jUsers = jUsers;
+    }
+
     public int getCheckIn() {
         return checkIn;
     }
@@ -119,19 +162,19 @@ public class Activity implements Serializable {
         this.checkIn = checkIn;
     }
 
-    public String getJusers() {
-        return jusers;
+    public String getcUsers() {
+        return cUsers;
     }
 
-    public void setJusers(String jusers) {
-        this.jusers = jusers;
+    public void setcUsers(String cUsers) {
+        this.cUsers = cUsers;
     }
 
-    public String getCusers() {
-        return cusers;
+    public String getStatus() {
+        return status;
     }
 
-    public void setCusers(String cusers) {
-        this.cusers = cusers;
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

@@ -20,7 +20,7 @@ public interface Agreement {
     int CHECK_IN = 1009;
     int EXIT = 1010;
     int REPORT = 1011;
-    int SEND_LOGIN_CODE = 1012;
+    int SEND_CODE = 1012;
     int LOGIN_BY_EMAIL = 1013;
     int RETRIEVE_PASSWORD = 1014;
     int RESET_PASSWORD = 1015;
@@ -43,6 +43,7 @@ public interface Agreement {
      */
     int VIEW_ACTIVITY = 3001;
     int VIEW_ACTIVITIES = 3002;
+    int FILTER_ACTIVITIES = 3003;
 
 
     int SUCCESS = 4001;
@@ -60,5 +61,6 @@ public interface Agreement {
     int REVIEW_CERTIFICATE_FAIL = 4010;
     int EMAIL_NOT_EXISTS = 4011;
     int EMAIL_ALREADY_EXISTS = 4012;
+    int RETRIEVE_PASSWORD_FAIL = 4013;
 
 }
