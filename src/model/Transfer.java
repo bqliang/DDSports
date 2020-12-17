@@ -19,6 +19,7 @@ public class Transfer implements Serializable {
     private String code;
     private Boolean ifPassCertification;
     private String sql;
+    private String newPassword;
 
     public int getCommand() {
         return command;
@@ -98,5 +99,13 @@ public class Transfer implements Serializable {
 
     public void setSql(String sql) {
         this.sql = sql;
+    }
+
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
     }
 }

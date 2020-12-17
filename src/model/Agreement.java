@@ -62,5 +62,7 @@ public interface Agreement {
     int EMAIL_NOT_EXISTS = 4011;
     int EMAIL_ALREADY_EXISTS = 4012;
     int RETRIEVE_PASSWORD_FAIL = 4013;
+    int EDIT_PROFILE_FAIL = 4014;
+    int APPLY_AUTHENTICATE_FAIL = 4015;
 
 }

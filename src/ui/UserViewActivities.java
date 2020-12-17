@@ -25,6 +25,7 @@ public class UserViewActivities extends JFrame implements Agreement {
 
     private JTable table;
     private JTextField searchInput;
+    private JFrame mySelf;
 
     public UserViewActivities() throws IOException, ClassNotFoundException {
         setTitle("滴滴运动");
@@ -49,11 +50,55 @@ public class UserViewActivities extends JFrame implements Agreement {
         toolBar.add(createActivityBtn);
 
         JButton editProfileBtn = new JButton("修改资料");
+        editProfileBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new EditProfile(mySelf);
+            }
+        });
         editProfileBtn.setFont(new Font("微软雅黑", Font.BOLD, 14));
         editProfileBtn.setFocusPainted(false);
         toolBar.add(editProfileBtn);
 
+        JButton changePasswordBtn = new JButton("更改密码");
+        changePasswordBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int ifRememberPassword = JOptionPane.showConfirmDialog(null, "您是否仍记得原密码？", "更改密码", 0);
+                if(ifRememberPassword == JOptionPane.YES_OPTION){
+                    // 通过原密码更改新密码
+                    new ResetPwByPw(mySelf);
+                }else if (ifRememberPassword == JOptionPane.NO_OPTION){
+                    new RetrievePassword(mySelf);
+                }
+            }
+        });
+        changePasswordBtn.setFont(new Font("微软雅黑", Font.BOLD, 14));
+        changePasswordBtn.setFocusPainted(false);
+        toolBar.add(changePasswordBtn);
+
+        JButton certificationBtn = new JButton("实名认证");
+        certificationBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new Certification(mySelf);
+            }
+        });
+        certificationBtn.setFont(new Font("微软雅黑", Font.BOLD, 14));
+        certificationBtn.setFocusPainted(false);
+        toolBar.add(certificationBtn);
+
         JButton exitBtn = new JButton("退出登录");
+        exitBtn.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int choice = JOptionPane.showConfirmDialog(null, "是否退出登录？", "确认操作", 0);
+                if (choice == JOptionPane.YES_OPTION){
+                    new Login();
+                    mySelf.dispose();
+                }
+            }
+        });
         exitBtn.setFont(new Font("微软雅黑", Font.BOLD, 14));
         exitBtn.setFocusPainted(false);
         toolBar.add(exitBtn);
@@ -85,7 +130,6 @@ public class UserViewActivities extends JFrame implements Agreement {
         });
         scrollPane.setViewportView(table);
         initTable();
-        setVisible(true);
         setLocationRelativeTo(null);
 
         JPanel panel = new JPanel();
@@ -168,6 +212,8 @@ public class UserViewActivities extends JFrame implements Agreement {
         filtrateBtn.setBackground(new Color(242, 142, 30));
         filtrateBtn.setBounds(552, 6, 64, 23);
         panel.add(filtrateBtn);
+        setVisible(true);
+        mySelf = this;
     }
 
     private void initTable() throws IOException, ClassNotFoundException {
@@ -190,7 +236,7 @@ public class UserViewActivities extends JFrame implements Agreement {
     private void setData(Transfer feedback) {
         List<Activity> activityList = feedback.getActivityList();
         int numOfActivities = activityList.size();
-        String[][] data = new String[numOfActivities][5];
+        String[][] data = new String[numOfActivities][6];
         List<Integer> idList = new ArrayList<>();
         for(int i = 0; i < numOfActivities; i++){
             idList.add(activityList.get(i).getId());
@@ -199,10 +245,11 @@ public class UserViewActivities extends JFrame implements Agreement {
             data[i][2] = activityList.get(i).getTime().toString().substring(0,16);
             data[i][3] = String.valueOf(activityList.get(i).getRecruit());
             data[i][4] = String.valueOf(activityList.get(i).getJoin());
+            data[i][5] = activityList.get(i).getStatus();
         }
         Logined.setIdList(idList);
 
-        table.setModel(new DefaultTableModel(data,new String []{"运动", "地点", "时间", "招募人数", "报名人数"}) {
+        table.setModel(new DefaultTableModel(data,new String []{"运动", "地点", "时间", "招募人数", "报名人数", "状态"}) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;

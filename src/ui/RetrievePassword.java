@@ -2,7 +2,6 @@ package ui;
 
 import client.Commit;
 import client.CountDownThread;
-import client.Logined;
 import client.Tools;
 import model.Agreement;
 import model.Transfer;
@@ -30,11 +29,11 @@ public class RetrievePassword extends JFrame implements Agreement {
     private String code;
     private JPasswordField pwAgainInput;
     private JPasswordField newPwInput;
-    private Login login;
+    private JFrame jframe;
 
-    public RetrievePassword(Login login) {
-        this.login = login;
-        login.setVisible(false);
+    public RetrievePassword(JFrame jframe) {
+        this.jframe = jframe;
+        jframe.setVisible(false);
         setTitle("找回密码");
         this.addWindowListener(new WindowAdapter() {
             @Override
@@ -210,7 +209,7 @@ public class RetrievePassword extends JFrame implements Agreement {
     }
 
     private void closeWindow(){
-        login.setVisible(true);
+        jframe.setVisible(true);
         this.dispose();
     }
 

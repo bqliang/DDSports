@@ -27,11 +27,11 @@ public class EmailLogin extends JFrame implements Agreement {
 	private JTextField emailInput;
 	private JTextField codeInput;
 	private String code;
-	private Login login;
+	private JFrame jframe;
 
-	public EmailLogin(Login login) {
-		this.login = login;
-		login.setVisible(false);
+	public EmailLogin(JFrame jframe) {
+		this.jframe = jframe;
+		jframe.setVisible(false);
 		this.setVisible(true);
 		setTitle("验证码登录");
 		this.addWindowListener(new WindowAdapter() {
@@ -198,7 +198,7 @@ public class EmailLogin extends JFrame implements Agreement {
 	}
 
 	private void closeWindow(){
-		login.setVisible(true);
+		jframe.setVisible(true);
 		this.dispose();
 	}
 

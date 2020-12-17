@@ -108,6 +108,16 @@ public class ServerThread implements Runnable, Agreement {
                     break;
                 }
 
+                case RESET_PASSWORD:{
+                    feedback = DbHandler.resetPwByPw(receive);
+                    break;
+                }
+
+                case EDIT_PROFILE:{
+                    feedback = DbHandler.editProfile(receive.getUser());
+                    break;
+                }
+
                 default:{
 
                 }

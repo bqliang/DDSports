@@ -1,6 +1,10 @@
 import client.Logined;
 import model.Agreement;
+import ui.EditProfile;
+import ui.Login;
 
+import javax.swing.*;
+import java.awt.*;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -11,7 +15,12 @@ import java.sql.Timestamp;
 
 public class Test implements Agreement {
     public static void main(String[] args) throws SQLException, IOException, ClassNotFoundException, InterruptedException {
-        String sql = "SELECT * FROM activity WHERE status = '未开始' AND (sponsor = '%s' OR jusers LIKE '%s')";
-        System.out.println(String.format(sql, "name", "%" + "name" + "%"));
+        int a = 1;
+        int b = a;
+        System.out.println(a);
+        System.out.println(b);
+        b = 2;
+        System.out.println(a);
+        System.out.println(b);
     }
 }

@@ -178,10 +178,13 @@ public class DbHandler implements Agreement {
      */
     public static Transfer authenticate (User user) throws SQLException {
         Transfer feedback = new Transfer();
-        stat.executeUpdate(String.format("UPDATE user SET realname = '%s', idcard = '%s', certificate = '审核中' WHERE id = %d",
-                user.getRealName(), user.getIdCard(), user.getId())
-        );
-        feedback.setResult(SUCCESS);
+        System.out.println(String.format("UPDATE user SET realname = '%s', idcard = '%s', certificate = '审核中' WHERE id = %d", user.getRealName(), user.getIdCard(), user.getId()));
+        int affectedRow = stat.executeUpdate(String.format("UPDATE user SET realname = '%s', idcard = '%s', certificate = '审核中' WHERE id = %d", user.getRealName(), user.getIdCard(), user.getId()));
+        if (affectedRow == 1){
+            feedback.setResult(SUCCESS);
+        }else {
+            feedback.setResult(APPLY_AUTHENTICATE_FAIL);
+        }
         return feedback;
     }
 
@@ -434,6 +437,12 @@ public class DbHandler implements Agreement {
     }
 
 
+    /**
+     * 用户通过验证码修改密码
+     * @param user
+     * @return
+     * @throws SQLException
+     */
     public static Transfer retrievePassword(User user) throws SQLException {
         Transfer feedback = new Transfer();
         int affectedRow = stat.executeUpdate(String.format("UPDATE user SET password = '%s' WHERE email = '%s'", user.getPw(), user.getEmail()));
@@ -445,6 +454,38 @@ public class DbHandler implements Agreement {
         return feedback;
     }
 
+
+    /**
+     * 用户通过原密码修改密码
+     * @param transfer
+     * @return
+     */
+    public static Transfer resetPwByPw(Transfer transfer) throws SQLException {
+        User user = transfer.getUser();
+        Transfer feedback = new Transfer();
+        String sql = "UPDATE user SET password = '%s' WHERE id = %d AND password = '%s'";
+        int affectedRow = stat.executeUpdate(String.format(sql, transfer.getNewPassword(), user.getId(), user.getPw()));
+        if (affectedRow == 1){
+            feedback.setResult(SUCCESS);
+        }else {
+            feedback.setResult(PASSWORD_ERROR);
+        }
+        return feedback;
+    }
+
+
+    public static Transfer editProfile(User user) throws SQLException {
+        Transfer feedback = new Transfer();
+        String sql = "UPDATE user SET gender = '%s', contact = '%s', email = '%s' WHERE id = %d";
+        System.out.println(String.format(sql, user.getGender(), user.getContact(), user.getEmail(), user.getId()));
+        int affectedRow = stat.executeUpdate(String.format(sql, user.getGender(), user.getContact(), user.getEmail(), user.getId()));
+        if (affectedRow == 1){
+            feedback.setResult(SUCCESS);
+        }else {
+            feedback.setResult(EDIT_PROFILE_FAIL);
+        }
+        return feedback;
+    }
 
 
 }

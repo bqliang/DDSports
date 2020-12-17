@@ -23,11 +23,11 @@ public class Register extends JFrame implements Agreement {
 	private JPasswordField passwordInputAgain;
 	private JTextField contactInput;
 	private JTextField emailInput;
-	private Login loginJframe;
+	private JFrame jframe;
 
-	public Register(Login jFrame) {
-		this.loginJframe = jFrame;
-		loginJframe.setVisible(false);
+	public Register(JFrame jFrame) {
+		this.jframe = jFrame;
+		jframe.setVisible(false);
 		setTitle("注册账号");
 		this.addWindowListener(new WindowAdapter() {
 			@Override
@@ -160,7 +160,7 @@ public class Register extends JFrame implements Agreement {
 		registerButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				User user = new User(nameInput.getText(), new String(passwordInput.getPassword()), (String) genderComboBox.getSelectedItem(),contactComboBox.getSelectedItem() + ":" + contactInput.getText(), emailInput.getText());
+				User user = new User(nameInput.getText(), new String(passwordInput.getPassword()), (String) genderComboBox.getSelectedItem(),contactComboBox.getSelectedItem() + "：" + contactInput.getText(), emailInput.getText());
 				Transfer transfer = new Transfer();
 				Transfer feedback = null;
 				transfer.setCommand(REGISTER);
@@ -290,6 +290,6 @@ public class Register extends JFrame implements Agreement {
 
 	private void closeWindow(){
 		dispose();
-		loginJframe.setVisible(true);
+		jframe.setVisible(true);
 	}
 }

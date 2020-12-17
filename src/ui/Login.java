@@ -2,7 +2,6 @@ package ui;
 
 import client.Commit;
 import client.Logined;
-import client.Tools;
 import model.Admin;
 import model.Agreement;
 import model.Transfer;
@@ -27,27 +26,8 @@ public class Login extends JFrame implements Agreement {
 	private JPanel contentPane;
 	private JTextField accountInput;
 	private JPasswordField passwordInput;
-	static private Login frame;
+	static private JFrame mySelf;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					frame = new Login();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
 	public Login() {
 		setTitle("\u6EF4\u6EF4\u8FD0\u52A8");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -114,7 +94,7 @@ public class Login extends JFrame implements Agreement {
 		loginByCode.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				new EmailLogin(frame);
+				new EmailLogin(mySelf);
 			}
 
 			@Override
@@ -144,7 +124,7 @@ public class Login extends JFrame implements Agreement {
 		registerButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new Register(frame);
+				new Register(mySelf);
 			}
 		});
 		registerButton.setForeground(new Color(242, 142, 30));
@@ -188,7 +168,7 @@ public class Login extends JFrame implements Agreement {
 					try {
 						// 打开活动列表
 						new UserViewActivities();
-						frame.dispose();
+						mySelf.dispose();
 					} catch (IOException | ClassNotFoundException ioException) {
 						ioException.printStackTrace();
 					}
@@ -227,7 +207,7 @@ public class Login extends JFrame implements Agreement {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				// 点击找回密码
-				new RetrievePassword(frame);
+				new RetrievePassword(mySelf);
 			}
 
 			@Override
@@ -247,5 +227,6 @@ public class Login extends JFrame implements Agreement {
 		forgetPassword.setBounds(108, 319, 369, 43);
 		contentPane.add(forgetPassword);
 		setVisible(true);
+		mySelf = this;
 	}
 }
