@@ -231,20 +231,21 @@ public class Login extends JFrame implements Agreement {
 		}
 
 		if (result == SUCCESS){
-			try {
-				// 打开活动列表
-				new UserViewActivities();
-				mySelf.dispose();
-			} catch (IOException | ClassNotFoundException ioException) {
-				ioException.printStackTrace();
+			if (!isAdmin.isSelected()){
+				try {
+					// 打开活动列表
+					new UserViewActivities();
+				} catch (IOException | ClassNotFoundException ioException) {
+					ioException.printStackTrace();
+				}
+				// 将登录成功的用户信息保存
+				Logined.setUser(feedback.getUser());
+			}else{
+				new AdminMain();
+				Logined.setAdmin(feedback.getAdmin());
 			}
-			// 将登录成功的用户信息保存
-			Logined.setUser(feedback.getUser());
-			if(isAdmin.isSelected()){
-
-			}else {
-
-			}
+			// 销毁当前窗口
+			mySelf.dispose();
 		}else if(result == ACCOUNT_NOT_EXIST){
 			JOptionPane.showMessageDialog(null, "请检查后重试", "账号不存在", JOptionPane.ERROR_MESSAGE);
 		}else if (result == PASSWORD_ERROR){

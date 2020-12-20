@@ -11,10 +11,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +21,8 @@ import java.util.List;
  */
 public class UserViewActivities extends JFrame implements Agreement {
 
+    private JCheckBox notStartCheckBox;
+    private JCheckBox hasJoinCheckBox;
     private JTable table;
     private JTextField searchInput;
     private JFrame mySelf;
@@ -151,17 +150,36 @@ public class UserViewActivities extends JFrame implements Agreement {
         panel.setLayout(null);
 
         searchInput = new JTextField();
+        searchInput.addKeyListener(new KeyListener() {
+
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER){
+                 search();
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+            }
+        });
         searchInput.setBounds(10, 4, 112, 26);
         panel.add(searchInput);
         searchInput.setColumns(10);
 
-        JCheckBox notStartCheckBox = new JCheckBox("未开始");
+        notStartCheckBox = new JCheckBox("未开始");
         notStartCheckBox.setBackground(Color.WHITE);
         notStartCheckBox.setFocusPainted(false);
         notStartCheckBox.setBounds(321, 6, 64, 23);
         panel.add(notStartCheckBox);
 
-        JCheckBox hasJoinCheckBox = new JCheckBox("由我发起 / 我已参加");
+        hasJoinCheckBox = new JCheckBox("由我发起 / 我已参加");
         hasJoinCheckBox.setBackground(Color.WHITE);
         hasJoinCheckBox.setFocusPainted(false);
         hasJoinCheckBox.setBounds(400, 6, 146, 23);
@@ -171,14 +189,7 @@ public class UserViewActivities extends JFrame implements Agreement {
         searchBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                notStartCheckBox.setSelected(false);
-                hasJoinCheckBox.setSelected(false);
-                String sql = "SELECT * FROM activity WHERE name LIKE '%s' OR place LIKE '%s'";
-                try {
-                    filterActivities(String.format(sql, "%" + searchInput.getText() + "%", "%" + searchInput.getText() + "%"));
-                } catch (IOException | ClassNotFoundException ioException) {
-                    ioException.printStackTrace();
-                }
+                search();
             }
         });
         searchBtn.setMargin(new Insets(2, 10, 2, 10));
@@ -270,6 +281,17 @@ public class UserViewActivities extends JFrame implements Agreement {
 
 //        DefaultTableModel dtm = new DefaultTableModel(data,new String []{"运动", "地点", "时间", "招募人数", "报名人数"});
 //        table.setModel(dtm);
+    }
+
+    private void search(){
+        notStartCheckBox.setSelected(false);
+        hasJoinCheckBox.setSelected(false);
+        String sql = "SELECT * FROM activity WHERE name LIKE '%s' OR place LIKE '%s'";
+        try {
+            filterActivities(String.format(sql, "%" + searchInput.getText() + "%", "%" + searchInput.getText() + "%"));
+        } catch (IOException | ClassNotFoundException ioException) {
+            ioException.printStackTrace();
+        }
     }
 
 }
