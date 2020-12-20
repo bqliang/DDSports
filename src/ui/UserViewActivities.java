@@ -2,6 +2,7 @@ package ui;
 
 import client.Commit;
 import client.Logined;
+import client.Tools;
 import model.Activity;
 import model.Agreement;
 import model.Transfer;
@@ -29,6 +30,7 @@ public class UserViewActivities extends JFrame implements Agreement {
 
     public UserViewActivities() throws IOException, ClassNotFoundException {
         setTitle("滴滴运动");
+        setIconImage(Tools.getImage("ddsports-icon.png"));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 640, 410);
         JPanel contentPane = new JPanel();
@@ -44,12 +46,18 @@ public class UserViewActivities extends JFrame implements Agreement {
         toolBar.setBackground(new Color(242, 142, 30));
         contentPane.add(toolBar);
 
-        JButton createActivityBtn = new JButton("发起运动");
+        JButton createActivityBtn = new JButton("发起运动", new ImageIcon(Tools.getImage("icons/flag.png")));
+        createActivityBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new CreateActivity(mySelf);
+            }
+        });
         createActivityBtn.setFont(new Font("微软雅黑", Font.BOLD, 14));
         createActivityBtn.setFocusPainted(false);
         toolBar.add(createActivityBtn);
 
-        JButton editProfileBtn = new JButton("修改资料");
+        JButton editProfileBtn = new JButton("修改资料", new ImageIcon(Tools.getImage("icons/edit.png")));
         editProfileBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -60,7 +68,7 @@ public class UserViewActivities extends JFrame implements Agreement {
         editProfileBtn.setFocusPainted(false);
         toolBar.add(editProfileBtn);
 
-        JButton changePasswordBtn = new JButton("更改密码");
+        JButton changePasswordBtn = new JButton("更改密码", new ImageIcon(Tools.getImage("icons/security.png")));
         changePasswordBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -77,7 +85,7 @@ public class UserViewActivities extends JFrame implements Agreement {
         changePasswordBtn.setFocusPainted(false);
         toolBar.add(changePasswordBtn);
 
-        JButton certificationBtn = new JButton("实名认证");
+        JButton certificationBtn = new JButton("实名认证", new ImageIcon(Tools.getImage("icons/certification.png")));
         certificationBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -88,7 +96,7 @@ public class UserViewActivities extends JFrame implements Agreement {
         certificationBtn.setFocusPainted(false);
         toolBar.add(certificationBtn);
 
-        JButton exitBtn = new JButton("退出登录");
+        JButton exitBtn = new JButton("退出登录", new ImageIcon(Tools.getImage("icons/exit.png")));
         exitBtn.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -103,12 +111,12 @@ public class UserViewActivities extends JFrame implements Agreement {
         exitBtn.setFocusPainted(false);
         toolBar.add(exitBtn);
 
-        JButton helpBtn = new JButton("帮助");
+        JButton helpBtn = new JButton("帮助", new ImageIcon(Tools.getImage("icons/help.png")));
         helpBtn.setFont(new Font("微软雅黑", Font.BOLD, 14));
         helpBtn.setFocusPainted(false);
         toolBar.add(helpBtn);
 
-        JButton aboutBtn = new JButton("关于");
+        JButton aboutBtn = new JButton("关于", new ImageIcon(Tools.getImage("icons/about.png")));
         aboutBtn.setFont(new Font("微软雅黑", Font.BOLD, 14));
         aboutBtn.setFocusPainted(false);
         toolBar.add(aboutBtn);
@@ -124,7 +132,11 @@ public class UserViewActivities extends JFrame implements Agreement {
                 if (e.getClickCount() == 2){
                     int selectRow = table.getSelectedRow();
                     int id = Logined.getIdList().get(selectRow);
-                    System.out.println("id = " + id);
+                    try {
+                        new UserViewActivityDetails(id, mySelf);
+                    } catch (IOException | ClassNotFoundException ioException) {
+                        ioException.printStackTrace();
+                    }
                 }
             }
         });

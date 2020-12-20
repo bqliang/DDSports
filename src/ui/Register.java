@@ -1,6 +1,7 @@
 package ui;
 
 import client.Commit;
+import client.Tools;
 import model.Agreement;
 import model.Transfer;
 import model.User;
@@ -29,6 +30,7 @@ public class Register extends JFrame implements Agreement {
 		this.jframe = jFrame;
 		jframe.setVisible(false);
 		setTitle("注册账号");
+		setIconImage(Tools.getImage("icons/person_add.png"));
 		this.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
@@ -177,7 +179,7 @@ public class Register extends JFrame implements Agreement {
 				}else if (result == EMAIL_ALREADY_EXISTS){
 					JOptionPane.showMessageDialog(null, "请尝试更换邮箱", "邮箱已被注册", JOptionPane.ERROR_MESSAGE);
 				}else if (result == SUCCESS){
-					JOptionPane.showMessageDialog(null, "注册成功");
+					JOptionPane.showMessageDialog(null, "注册成功!");
 				}
 			}
 		});

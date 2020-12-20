@@ -2,8 +2,10 @@ package ui;
 
 import client.Commit;
 import client.Logined;
+import client.Tools;
 import model.Agreement;
 import model.Transfer;
+import model.User;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
@@ -35,6 +37,7 @@ public class ResetPwByPw extends JFrame implements Agreement {
 		this.jframe = jframe;
 		jframe.setVisible(false);
 		setTitle("更改密码");
+		setIconImage(Tools.getImage("icons/security.png"));
 		this.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
@@ -98,10 +101,13 @@ public class ResetPwByPw extends JFrame implements Agreement {
 		resetPwBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				User user = new User();
+				user.setId(Logined.getUser().getId());
+				user.setPw(new String(oldPwInput.getPassword()));
 				Transfer transfer = new Transfer();
 				Transfer feedback = null;
 				transfer.setCommand(RESET_PASSWORD);
-				transfer.setUser(Logined.getUser());
+				transfer.setUser(user);
 				transfer.setNewPassword(new String(newPwInput.getPassword()));
 				Commit.set(transfer);
 				try {

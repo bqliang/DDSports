@@ -35,6 +35,7 @@ public class RetrievePassword extends JFrame implements Agreement {
         this.jframe = jframe;
         jframe.setVisible(false);
         setTitle("找回密码");
+        setIconImage(Tools.getImage("icons/security.png"));
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {

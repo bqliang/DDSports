@@ -54,7 +54,7 @@ public class ServerThread implements Runnable, Agreement {
                 }
 
                 case CREATE_ACTIVITY:{
-                    feedback = DbHandler.createActivity(receive.getUser(),receive.getActivity());
+                    feedback = DbHandler.createActivity(receive.getActivity());
                     break;
                 }
 

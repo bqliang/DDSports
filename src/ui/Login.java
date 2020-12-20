@@ -2,6 +2,7 @@ package ui;
 
 import client.Commit;
 import client.Logined;
+import client.Tools;
 import model.Admin;
 import model.Agreement;
 import model.Transfer;
@@ -11,10 +12,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.io.IOException;
 
 /**
@@ -26,10 +24,12 @@ public class Login extends JFrame implements Agreement {
 	private JPanel contentPane;
 	private JTextField accountInput;
 	private JPasswordField passwordInput;
+	private JRadioButton isAdmin;
 	static private JFrame mySelf;
 
 	public Login() {
-		setTitle("\u6EF4\u6EF4\u8FD0\u52A8");
+		setTitle("登录滴滴运动");
+		setIconImage(Tools.getImage("ddsports-icon.png"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 600, 430);
 		setLocationRelativeTo(null);
@@ -65,6 +65,24 @@ public class Login extends JFrame implements Agreement {
 		mainPanel.add(accountInput);
 		
 		passwordInput = new JPasswordField();
+		passwordInput.addKeyListener(new KeyListener() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER){
+					login();
+				}
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+
+			}
+		});
 		passwordInput.setFont(new Font("等线", Font.PLAIN, 16));
 		passwordInput.setBounds(81, 53, 176, 32);
 		mainPanel.add(passwordInput);
@@ -81,7 +99,7 @@ public class Login extends JFrame implements Agreement {
 		passwLabel.setBounds(0, 54, 82, 32);
 		mainPanel.add(passwLabel);
 		
-		JRadioButton isAdmin = new JRadioButton("\u7BA1\u7406\u5458");
+		isAdmin = new JRadioButton("管理员");
 		isAdmin.setToolTipText("非管理员请勿勾选");
 		isAdmin.setFont(new Font("微软雅黑", Font.PLAIN, 14));
 		isAdmin.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -136,54 +154,11 @@ public class Login extends JFrame implements Agreement {
 		registerButton.setBounds(50, 5, 109, 45);
 		buttonPanel.add(registerButton);
 		
-		JButton loginButton = new JButton("\u767B\u5F55");
+		JButton loginButton = new JButton("登录");
 		loginButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Transfer transfer = new Transfer();
-				Transfer feedback = null;
-				int result = 0;
-
-				if (isAdmin.isSelected()){
-					transfer.setAdmin(
-							new Admin(accountInput.getText(), new String(passwordInput.getPassword()))
-					);
-					transfer.setCommand(ADMIN_LOGIN);
-				}else {
-					transfer.setUser(
-							new User(accountInput.getText(), new String(passwordInput.getPassword()))
-					);
-					transfer.setCommand(USER_LOGIN);
-				}
-
-				Commit.set(transfer);
-				try {
-					feedback = Commit.start();
-					result = feedback.getResult();
-				} catch (IOException | ClassNotFoundException exception) {
-					exception.printStackTrace();
-				}
-
-				if (result == SUCCESS){
-					try {
-						// 打开活动列表
-						new UserViewActivities();
-						mySelf.dispose();
-					} catch (IOException | ClassNotFoundException ioException) {
-						ioException.printStackTrace();
-					}
-					// 将登录成功的用户信息保存
-					Logined.setUser(feedback.getUser());
-					if(isAdmin.isSelected()){
-
-					}else {
-
-					}
-				}else if(result == ACCOUNT_NOT_EXIST){
-					JOptionPane.showMessageDialog(null, "请检查后重试", "账号不存在", JOptionPane.ERROR_MESSAGE);
-				}else if (result == PASSWORD_ERROR){
-					JOptionPane.showMessageDialog(null, "请检查后重试，如忘记密码，可通过邮箱找回", "密码错误", JOptionPane.ERROR_MESSAGE);
-				}
+				login();
 			}
 		});
 		loginButton.setForeground(Color.WHITE);
@@ -228,5 +203,52 @@ public class Login extends JFrame implements Agreement {
 		contentPane.add(forgetPassword);
 		setVisible(true);
 		mySelf = this;
+	}
+
+	private void login(){
+		Transfer transfer = new Transfer();
+		Transfer feedback = null;
+		int result = 0;
+
+		if (isAdmin.isSelected()){
+			transfer.setAdmin(
+					new Admin(accountInput.getText(), new String(passwordInput.getPassword()))
+			);
+			transfer.setCommand(ADMIN_LOGIN);
+		}else {
+			transfer.setUser(
+					new User(accountInput.getText(), new String(passwordInput.getPassword()))
+			);
+			transfer.setCommand(USER_LOGIN);
+		}
+
+		Commit.set(transfer);
+		try {
+			feedback = Commit.start();
+			result = feedback.getResult();
+		} catch (IOException | ClassNotFoundException exception) {
+			exception.printStackTrace();
+		}
+
+		if (result == SUCCESS){
+			try {
+				// 打开活动列表
+				new UserViewActivities();
+				mySelf.dispose();
+			} catch (IOException | ClassNotFoundException ioException) {
+				ioException.printStackTrace();
+			}
+			// 将登录成功的用户信息保存
+			Logined.setUser(feedback.getUser());
+			if(isAdmin.isSelected()){
+
+			}else {
+
+			}
+		}else if(result == ACCOUNT_NOT_EXIST){
+			JOptionPane.showMessageDialog(null, "请检查后重试", "账号不存在", JOptionPane.ERROR_MESSAGE);
+		}else if (result == PASSWORD_ERROR){
+			JOptionPane.showMessageDialog(null, "请检查后重试，如忘记密码，可通过邮箱找回", "密码错误", JOptionPane.ERROR_MESSAGE);
+		}
 	}
 }

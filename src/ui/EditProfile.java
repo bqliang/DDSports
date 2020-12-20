@@ -2,6 +2,7 @@ package ui;
 
 import client.Commit;
 import client.Logined;
+import client.Tools;
 import model.Agreement;
 import model.Transfer;
 import model.User;
@@ -30,6 +31,7 @@ public class EditProfile extends JFrame implements Agreement {
         this.jframe = jframe;
         jframe.setVisible(false);
         setTitle("修改资料");
+        setIconImage(Tools.getImage("icons/edit.png"));
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {

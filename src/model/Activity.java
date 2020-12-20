@@ -22,6 +22,10 @@ public class Activity implements Serializable {
     private String cUsers;
     private String status;
 
+    public Activity(int id) {
+        this.id = id;
+    }
+
     /**
      * 用于发起活动的构造方法
      * @param name 活动名

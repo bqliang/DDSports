@@ -191,30 +191,29 @@ public class DbHandler implements Agreement {
 
     /**
      * 用户发起活动
-     * @param user
      * @param activity
      * @return
      * @throws SQLException
      */
-    public static Transfer createActivity(User user, Activity activity) throws SQLException {
+    public static Transfer createActivity(Activity activity) throws SQLException {
         Transfer feedback = new Transfer();
-        String sql = String.format("INSERT INTO activity (name,sponsor,time,duration,place,postscript,recruit) VALUES ('%s','%s','%s',%f,'%s','%s',%d)",
-                activity.getName(), user.getName(), activity.getTime(), activity.getDuration(), activity.getPlace(), activity.getRecruit());
-        int affectedRow = stat.executeUpdate(sql);
+        String sql = "INSERT INTO activity (name,sponsor,time,duration,place,postscript,recruit) VALUES ('%s','%s','%s',%.1f,'%s','%s',%d)";
+        int affectedRow = stat.executeUpdate(String.format(sql,
+                activity.getName(), activity.getSponsor(), activity.getTime(), activity.getDuration(), activity.getPlace(), activity.getPostscript(), activity.getRecruit()));
         if (affectedRow == 1){
             // 获取id
-            ResultSet rs = stat.executeQuery(String.format("SELECT id FROM activity where name = '%s' AND sponsor = '%s' AND starttime ='%s' AND endtime = '%s'",
-                    activity.getName(), activity.getSponsor(), activity.getTime(), activity.getDuration()));
+            ResultSet rs = stat.executeQuery(String.format("SELECT * FROM activity WHERE name = '%s' AND sponsor = '%s' AND time ='%s' AND place = '%s';",
+                    activity.getName(), activity.getSponsor(), activity.getTime(), activity.getPlace()));
             rs.next();
             int id = rs.getInt("id");
+            rs.next();
+            System.out.println(id);
             String setStatus = "CREATE EVENT set%sStatus%d\n" +
                     "    ON SCHEDULE AT '%s'\n" +
                     "    DO\n" +
                     "      UPDATE activity SET status = '%s' WHERE id = %d;";
-            stat.execute(String.format(setStatus,
-                    "Start", id, activity.getTime(), "已开始"), id);
-            stat.execute(String.format(setStatus,
-                    "End", id, new Timestamp((long) (activity.getTime().getTime() + (activity.getDuration() * 3600000))), "已结束"), id);
+            stat.execute(String.format(setStatus, "Start", id, activity.getTime(), "已开始", id));
+            stat.execute(String.format(setStatus, "End", id, new Timestamp((long) (activity.getTime().getTime() + (activity.getDuration() * 3600000))), "已结束", id));
             feedback.setResult(SUCCESS);
         }else {
             feedback.setResult(CREATE_ACTIVITY_FAIL);

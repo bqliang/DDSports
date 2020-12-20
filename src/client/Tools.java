@@ -1,5 +1,10 @@
 package client;
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -34,4 +39,28 @@ public class Tools {
         Matcher matcher = passwordPattern.matcher(password);
         return matcher.matches();
     }
+
+    public static Image getImage(String path) {
+        Image image = null;
+        InputStream is = Tools.class.getClassLoader().getResourceAsStream(path);
+        try {
+            image = ImageIO.read(is);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return image;
+    }
+
+    public static Icon getIcon(String path) {
+        Icon icon = null;
+        InputStream is = Tools.class.getClassLoader().getResourceAsStream(path);
+        try {
+            icon = (Icon) ImageIO.read(is);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return icon;
+    }
+
+
 }

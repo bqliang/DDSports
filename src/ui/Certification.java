@@ -2,6 +2,7 @@ package ui;
 
 import client.Commit;
 import client.Logined;
+import client.Tools;
 import model.Agreement;
 import model.Transfer;
 import model.User;
@@ -29,6 +30,7 @@ public class Certification extends JFrame implements Agreement {
 		this.jframe = jframe;
 		jframe.setVisible(false);
 		setTitle("申请实名认证");
+		setIconImage(Tools.getImage("icons/certification.png"));
 		this.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {

@@ -34,6 +34,7 @@ public class EmailLogin extends JFrame implements Agreement {
 		jframe.setVisible(false);
 		this.setVisible(true);
 		setTitle("验证码登录");
+		setIconImage(Tools.getImage("icons/email.png"));
 		this.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
