@@ -7,25 +7,15 @@ import model.Activity;
 import model.Agreement;
 import model.Transfer;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.Color;
-import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
-import javax.swing.SwingConstants;
-import javax.swing.JSeparator;
-import javax.swing.JTextArea;
-import javax.swing.JButton;
-import javax.swing.JSpinner;
 
 /**
  * @author bqliang
@@ -59,7 +49,11 @@ public class UserViewActivityDetails extends JFrame implements Agreement {
 		this.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				closeWindow();
+				try {
+					closeWindow();
+				} catch (IOException | ClassNotFoundException ioException) {
+					ioException.printStackTrace();
+				}
 			}
 		});
 		setBounds(100, 100, 585, 460);
@@ -163,14 +157,107 @@ public class UserViewActivityDetails extends JFrame implements Agreement {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String btnStr = button.getText();
+				Transfer transfer = new Transfer();
+				Transfer feedback = null;
+				int result;
+
+				// 发起人删除活动
 				if (btnStr.equals("删除")){
+					int choice = JOptionPane.showConfirmDialog(null, "是否确定删除该活动？多次爽约账号信誉值将受到影响。", "请谨慎操作", 0);
+					if (choice == JOptionPane.YES_OPTION){
 
+					}else {
+						return;
+					}
+					transfer.setCommand(DELETE_ACTIVITY);
+					transfer.setActivity(
+							new Activity(activityId)
+					);
+					Commit.set(transfer);
+					try {
+						feedback = Commit.start();
+					} catch (IOException | ClassNotFoundException ioException) {
+						ioException.printStackTrace();
+					}
+					result = feedback.getResult();
+					if (result == SUCCESS){
+						JOptionPane.showMessageDialog(null, "删除活动成功！");
+						try {
+							closeWindow();
+						} catch (IOException | ClassNotFoundException ioException) {
+							ioException.printStackTrace();
+						}
+					}else if (result == DELETE_ACTIVITY_FAIL){
+						JOptionPane.showMessageDialog(null, "很抱歉出现未知错误", "删除活动失败", JOptionPane.ERROR_MESSAGE);
+					}
+					// 其他用户加入活动
 				}else if (btnStr.equals("加入活动")){
+					transfer.setCommand(JOIN);
+					transfer.setUser(Logined.getUser());
+					transfer.setActivity(
+							new Activity(activityId)
+					);
+					Commit.set(transfer);
+					try {
+						feedback = Commit.start();
+					} catch (IOException | ClassNotFoundException ioException) {
+						ioException.printStackTrace();
+					}
+					result = feedback.getResult();
+					if (result == SUCCESS){
+						JOptionPane.showMessageDialog(null, "加入活动成功！");
+						refreshWindow();
+					}else if (result == ALREADY_JOINED){
+						JOptionPane.showMessageDialog(null, "您已参加此活动，请勿重复提交。", "重复参加活动",JOptionPane.WARNING_MESSAGE);
+					}else if (result == JOIN_FAIL){
+						JOptionPane.showMessageDialog(null, "很抱歉出现未知错误", "加入活动失败",JOptionPane.ERROR_MESSAGE);
+					}
 
+					// 用户退出活动
 				}else if(btnStr.equals("退出活动")){
+					transfer.setCommand(EXIT_ACTIVITY);
+					transfer.setActivity(
+							new Activity(activityId)
+					);
+					transfer.setUser(Logined.getUser());
+					Commit.set(transfer);
+					try {
+						feedback = Commit.start();
+					} catch (IOException | ClassNotFoundException ioException) {
+						ioException.printStackTrace();
+					}
+					result = feedback.getResult();
+					if (result == SUCCESS){
+						JOptionPane.showMessageDialog(null, "您已成功退出此活动，期待您的下次参与！");
+						refreshWindow();
+					}else if (result == EXIT_ACTIVITY_FAIL){
+						JOptionPane.showMessageDialog(null, "很抱歉出现未知错误", "退出活动失败",JOptionPane.ERROR_MESSAGE);
+					}else if (result == NOT_YET_JOIN){
+						JOptionPane.showMessageDialog(null, "您并未参与该活动", "无法退出该活动",JOptionPane.ERROR_MESSAGE);
+					}
 
+					// 用户打卡
 				}else if (btnStr.equals("打卡")){
-
+					transfer.setCommand(CHECK_IN);
+					transfer.setActivity(
+							new Activity(activityId)
+					);
+					transfer.setUser(Logined.getUser());
+					Commit.set(transfer);
+					try {
+						feedback = Commit.start();
+					} catch (IOException | ClassNotFoundException ioException) {
+						ioException.printStackTrace();
+					}
+					result = feedback.getResult();
+					if (result == SUCCESS){
+						JOptionPane.showMessageDialog(null, "您已成功打卡！");
+						refreshWindow();
+					}else if (result == CHECK_IN_FAIL){
+						JOptionPane.showMessageDialog(null, "很抱歉出现未知错误", "打卡失败",JOptionPane.ERROR_MESSAGE);
+					}else if (result == ALREADY_CHECK_IN){
+						JOptionPane.showMessageDialog(null, "您已成功打卡，请勿重复打卡", "温馨提示",JOptionPane.ERROR_MESSAGE);
+					}
 				}
 			}
 		});
@@ -275,8 +362,11 @@ public class UserViewActivityDetails extends JFrame implements Agreement {
 
 	private void setData(Activity activity){
 		String status = activity.getStatus();
+		String sponsor = activity.getSponsor();
+		String jUsers = activity.getjUsers();
+		String cUsers = activity.getcUsers();
 		activityNameShow.setText(activity.getName());
-		sponsorShow.setText(activity.getSponsor());
+		sponsorShow.setText(sponsor);
 		statrTimeShow.setText(activity.getTime().toString().substring(0,16));
 		durationShow.setText(String.valueOf(activity.getDuration()));
 		placeShow.setText(activity.getPlace());
@@ -284,34 +374,38 @@ public class UserViewActivityDetails extends JFrame implements Agreement {
 		joinShow.setText(String.valueOf(activity.getJoin()));
 		checkinShow.setText(String.valueOf(activity.getCheckIn()));
 		postscriptShow.setText(activity.getPostscript());
-		jusersShow.setText(activity.getjUsers());
-		cusersShow.setText(activity.getcUsers());
+		jusersShow.setText(jUsers);
+		cusersShow.setText(cUsers);
 		statusShow.setText(status);
+
+		String loginedUserName = Logined.getUser().getName();
 
 		if (status.equals("已结束")){
 			button.setVisible(false);
 		}else if (status.equals("已开始")){
-			if (activity.getSponsor().equals(Logined.getUser().getName())){
+			if (sponsor.equals(loginedUserName)){
 				button.setVisible(false);
-			}else if(activity.getcUsers().contains(Logined.getUser().getName())){
+			}else if(cUsers.contains(loginedUserName)){
 				button.setText("已打卡");
 				button.setEnabled(false);
-			}else if(!activity.getcUsers().contains(Logined.getUser().getName())){
+			}else if(!cUsers.contains(loginedUserName)){
 				button.setText("打卡");
 			}
 		}else if (status.equals("未开始")){
-			if (activity.getSponsor().equals(Logined.getUser().getName())){
+			if (sponsor.equals(loginedUserName)){
 				button.setText("删除");
-			}else if(activity.getjUsers().contains(Logined.getUser().getName())){
+			}else if(jUsers.contains(loginedUserName)){
 				button.setText("退出活动");
-			}else if(!activity.getjUsers().contains(Logined.getUser().getName())){
+			}else if(!jUsers.contains(loginedUserName)){
 				button.setText("加入活动");
 			}
 		}
 	}
 
-	private void closeWindow(){
+	private void closeWindow() throws IOException, ClassNotFoundException {
 		jframe.setVisible(true);
+		UserViewActivities userViewActivities = (UserViewActivities) jframe;
+		userViewActivities.initTable();
 		close();
 	}
 
@@ -319,9 +413,13 @@ public class UserViewActivityDetails extends JFrame implements Agreement {
 		mySelf.dispose();
 	}
 
-	private void refreshWindow() throws IOException, ClassNotFoundException {
+	private void refreshWindow() {
 		mySelf.setVisible(false);
-		new UserViewActivityDetails(activityId, jframe);
+		try {
+			new UserViewActivityDetails(activityId, jframe);
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 		mySelf.dispose();
 	}
 }

@@ -18,13 +18,12 @@ public interface Agreement {
     int SEARCH = 1007;
     int JOIN = 1008;
     int CHECK_IN = 1009;
-    int EXIT = 1010;
+    int EXIT_ACTIVITY = 1010;
     int REPORT = 1011;
     int SEND_CODE = 1012;
     int LOGIN_BY_EMAIL = 1013;
     int RETRIEVE_PASSWORD = 1014;
     int RESET_PASSWORD = 1015;
-
 
     /**
      * 管理员相关操作码
@@ -32,7 +31,6 @@ public interface Agreement {
     int ADMIN_LOGIN = 2001;
     int VIEW_USER = 2002;
     int DELETE_USER = 2003;
-    int DELETE_ACTIVITY = 2004;
     int REVIEW_CERTIFICATE = 2005;
     int REVIEW_REPORT = 2006;
     int VIEW_CERTIFICATE_USERS = 2007;
@@ -44,6 +42,7 @@ public interface Agreement {
     int VIEW_ACTIVITY = 3001;
     int VIEW_ACTIVITIES = 3002;
     int FILTER_ACTIVITIES = 3003;
+    int DELETE_ACTIVITY = 3004;
 
 
     int SUCCESS = 4001;
@@ -64,5 +63,9 @@ public interface Agreement {
     int RETRIEVE_PASSWORD_FAIL = 4013;
     int EDIT_PROFILE_FAIL = 4014;
     int APPLY_AUTHENTICATE_FAIL = 4015;
-
+    int DELETE_ACTIVITY_FAIL = 4016;
+    int ALREADY_JOINED = 4017;
+    int EXIT_ACTIVITY_FAIL = 4018;
+    int NOT_YET_JOIN = 4019;
+    int ALREADY_CHECK_IN = 4020;
 }

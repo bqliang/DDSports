@@ -118,6 +118,16 @@ public class ServerThread implements Runnable, Agreement {
                     break;
                 }
 
+                case DELETE_ACTIVITY:{
+                    feedback = DbHandler.deleteActivity(receive.getActivity());
+                    break;
+                }
+
+                case EXIT_ACTIVITY:{
+                    feedback = DbHandler.exitActivity(receive.getUser(), receive.getActivity());
+                    break;
+                }
+
                 default:{
 
                 }

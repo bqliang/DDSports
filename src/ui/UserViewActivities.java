@@ -228,7 +228,7 @@ public class UserViewActivities extends JFrame implements Agreement {
         mySelf = this;
     }
 
-    private void initTable() throws IOException, ClassNotFoundException {
+    public void initTable() throws IOException, ClassNotFoundException {
         Transfer transfer = new Transfer();
         transfer.setCommand(VIEW_ACTIVITIES);
         Commit.set(transfer);

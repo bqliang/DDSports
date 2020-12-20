@@ -230,18 +230,22 @@ public class DbHandler implements Agreement {
      * @throws SQLException
      */
     public static Transfer join(User user, Activity activity) throws SQLException {
+        int id = activity.getId();
         Transfer feedback = new Transfer();
-        int join = activity.getJoin() + 1;
-        String jUsers = activity.getjUsers() + user.getName() + " ";
-        int affectedRow = stat.executeUpdate(String.format("UPDATE activity SET join = %d, jusers = '%s' WHERE id = %d",
-                join,jUsers, activity.getId()));
-        if (affectedRow == 1){
-            feedback.setResult(SUCCESS);
-            activity.setJoin(join);
-            activity.setjUsers(jUsers);
-            feedback.setActivity(activity);
+        // 先获取最新的数据
+        ResultSet rs = stat.executeQuery(String.format("SELECT * FROM activity WHERE id = %d", id));
+        rs.next();
+        String jUsers = rs.getString("jusers");
+        if (!jUsers.contains(user.getName())){
+            int affectedRow = stat.executeUpdate(String.format("UPDATE activity SET `join` = `join`+1, jusers = '%s' WHERE id = %d",
+                    rs.getString("jusers") + user.getName() + " ", id));
+            if (affectedRow == 1){
+                feedback.setResult(SUCCESS);
+            }else {
+                feedback.setResult(JOIN_FAIL);
+            }
         }else {
-            feedback.setResult(JOIN_FAIL);
+            feedback.setResult(ALREADY_JOINED);
         }
         return feedback;
     }
@@ -255,16 +259,22 @@ public class DbHandler implements Agreement {
      * @throws SQLException
      */
     public static Transfer checkIn(User user, Activity activity) throws SQLException {
+        int id = activity.getId();
+        String cusers;
+        String userName = user.getName();
         Transfer feedback = new Transfer();
-        int checkIn = activity.getCheckIn() + 1;
-        String cusers = activity.getcUsers() + user.getName() + " ";
-        int affectedRow = stat.executeUpdate(String.format("UPDATE activity set checkin = %d, cusers = '%s' WHERE id = %d",
-                checkIn,cusers,activity.getId()));
-        if (affectedRow == 1){
-            activity.setCheckIn(checkIn);
-            activity.setcUsers(cusers);
-            feedback.setActivity(activity);
-            feedback.setResult(SUCCESS);
+        ResultSet rs = stat.executeQuery(String.format("SELECT cusers FROM activity WHERE id = %d", id));
+        rs.next();
+        cusers = rs.getString("cusers");
+        if (!cusers.contains(userName)){
+            cusers = cusers + userName + " ";
+            int affectedRow = stat.executeUpdate(String.format("UPDATE activity SET checkin = checkin+1, cusers = '%s' WHERE id = %d",
+                    cusers, id));
+            if (affectedRow == 1){
+                feedback.setResult(SUCCESS);
+            }else {
+                feedback.setResult(CHECK_IN_FAIL);
+            }
         }else {
             feedback.setResult(CHECK_IN_FAIL);
         }
@@ -473,6 +483,12 @@ public class DbHandler implements Agreement {
     }
 
 
+    /**
+     * 用户修改资料
+     * @param user
+     * @return
+     * @throws SQLException
+     */
     public static Transfer editProfile(User user) throws SQLException {
         Transfer feedback = new Transfer();
         String sql = "UPDATE user SET gender = '%s', contact = '%s', email = '%s' WHERE id = %d";
@@ -486,5 +502,52 @@ public class DbHandler implements Agreement {
         return feedback;
     }
 
+
+    /**
+     * 删除活动
+     * @param activity
+     * @return
+     * @throws SQLException
+     */
+    public static Transfer deleteActivity(Activity activity) throws SQLException {
+        Transfer feedback = new Transfer();
+        int affectedRow = stat.executeUpdate(String.format("DELETE FROM activity WHERE id = %d", activity.getId()));
+        if (affectedRow == 1){
+            feedback.setResult(SUCCESS);
+        }else {
+            feedback.setResult(DELETE_ACTIVITY_FAIL);
+        }
+        return feedback;
+    }
+
+
+    /**
+     * 用户退出已报名的活动
+     * @param user
+     * @param activity
+     * @return
+     * @throws SQLException
+     */
+    public static Transfer exitActivity(User user, Activity activity) throws SQLException {
+        int id = activity.getId();
+        String userName = user.getName();
+        Transfer feedback = new Transfer();
+        ResultSet rs = stat.executeQuery(String.format("SELECT jusers FROM activity WHERE id = %d", id));
+        rs.next();
+        String jusers = rs.getString("jusers");
+        if (jusers.contains(userName)){
+            jusers = jusers.replace(userName + " ", "");
+            int affectedRow = stat.executeUpdate(String.format("UPDATE activity SET `join` = `join`-1, jusers = '%s' WHERE id = %d",
+                    jusers, id));
+            if (affectedRow == 1){
+                feedback.setResult(SUCCESS);
+            }else {
+                feedback.setResult(EXIT_ACTIVITY_FAIL);
+            }
+        }else {
+            feedback.setResult(NOT_YET_JOIN);
+        }
+        return feedback;
+    }
 
 }
