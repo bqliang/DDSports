@@ -1,5 +1,6 @@
 package ui;
 
+import client.Logined;
 import client.Tools;
 
 import java.awt.BorderLayout;
@@ -16,6 +17,8 @@ import javax.swing.ImageIcon;
 import java.awt.Font;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -42,64 +45,77 @@ public class AdminMain extends JFrame {
 		contentPane.add(panel);
 		panel.setLayout(new GridLayout(1, 3, 5, 5));
 		
-		JButton userManageBtn = new JButton("用户管理");
-		userManageBtn.addMouseListener(new MouseAdapter() {
+		JButton usersManageBtn = new JButton("用户管理");
+		usersManageBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				userManageBtn.setBackground(new Color(52, 111, 164));
+				usersManageBtn.setBackground(new Color(52, 111, 164));
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
-				userManageBtn.setBackground(new Color(242, 142, 30));
+				usersManageBtn.setBackground(new Color(242, 142, 30));
 			}
 		});
-		userManageBtn.setForeground(Color.WHITE);
-		userManageBtn.setBackground(new Color(242, 142, 30));
-		userManageBtn.setBorderPainted(false);
-		userManageBtn.setFont(new Font("微软雅黑", Font.BOLD, 16));
-		userManageBtn.setFocusPainted(false);
-		userManageBtn.setIcon(new ImageIcon(Tools.getImage("icons/admin_groups.png")));
-		panel.add(userManageBtn);
+		usersManageBtn.setForeground(Color.WHITE);
+		usersManageBtn.setBackground(new Color(242, 142, 30));
+		usersManageBtn.setBorderPainted(false);
+		usersManageBtn.setFont(new Font("微软雅黑", Font.BOLD, 16));
+		usersManageBtn.setFocusPainted(false);
+		usersManageBtn.setIcon(new ImageIcon(Tools.getImage("icons/admin_groups.png")));
+		panel.add(usersManageBtn);
 		
-		JButton activityManageBtn = new JButton("活动管理");
-		activityManageBtn.addMouseListener(new MouseAdapter() {
+		JButton activitiesManageBtn = new JButton("活动管理");
+		activitiesManageBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new ActivitiesManage(mySelf);
+			}
+		});
+		activitiesManageBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				activityManageBtn.setBackground(new Color(52, 111, 164));
+				activitiesManageBtn.setBackground(new Color(52, 111, 164));
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
-				activityManageBtn.setBackground(new Color(242, 142, 30));
+				activitiesManageBtn.setBackground(new Color(242, 142, 30));
 			}
 		});
-		activityManageBtn.setForeground(Color.WHITE);
-		activityManageBtn.setBackground(new Color(242, 142, 30));
-		activityManageBtn.setBorderPainted(false);
-		activityManageBtn.setFont(new Font("微软雅黑", Font.BOLD, 16));
-		activityManageBtn.setFocusPainted(false);
-		activityManageBtn.setIcon(new ImageIcon(Tools.getImage("icons/admin_basketball.png")));
-		panel.add(activityManageBtn);
+		activitiesManageBtn.setForeground(Color.WHITE);
+		activitiesManageBtn.setBackground(new Color(242, 142, 30));
+		activitiesManageBtn.setBorderPainted(false);
+		activitiesManageBtn.setFont(new Font("微软雅黑", Font.BOLD, 16));
+		activitiesManageBtn.setFocusPainted(false);
+		activitiesManageBtn.setIcon(new ImageIcon(Tools.getImage("icons/admin_basketball.png")));
+		panel.add(activitiesManageBtn);
 		
-		JButton certificationBtn = new JButton("实名审核");
-		certificationBtn.addMouseListener(new MouseAdapter() {
+		JButton certificationManageBtn = new JButton("实名审核");
+		certificationManageBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new CertificationManage(mySelf);
+			}
+		});
+		certificationManageBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				certificationBtn.setBackground(new Color(52, 111, 164));
+				certificationManageBtn.setBackground(new Color(52, 111, 164));
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
-				certificationBtn.setBackground(new Color(242, 142, 30));
+				certificationManageBtn.setBackground(new Color(242, 142, 30));
 			}
 		});
-		certificationBtn.setForeground(Color.WHITE);
-		certificationBtn.setBackground(new Color(242, 142, 30));
-		certificationBtn.setBorderPainted(false);
-		certificationBtn.setFont(new Font("微软雅黑", Font.BOLD, 16));
-		certificationBtn.setFocusPainted(false);
-		certificationBtn.setIcon(new ImageIcon(Tools.getImage("icons/admin_verified.png")));
-		panel.add(certificationBtn);
+		certificationManageBtn.setForeground(Color.WHITE);
+		certificationManageBtn.setBackground(new Color(242, 142, 30));
+		certificationManageBtn.setBorderPainted(false);
+		certificationManageBtn.setFont(new Font("微软雅黑", Font.BOLD, 16));
+		certificationManageBtn.setFocusPainted(false);
+		certificationManageBtn.setIcon(new ImageIcon(Tools.getImage("icons/admin_verified.png")));
+		panel.add(certificationManageBtn);
 		
-		JLabel welcomeText = new JLabel("Hello, 斌强，别来无恙啊！");
+		JLabel welcomeText = new JLabel("");
+		welcomeText.setText(String.format("Hello, %s，别来无恙。", Logined.getAdmin().getName()));
 		welcomeText.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {

@@ -550,4 +550,34 @@ public class DbHandler implements Agreement {
         return feedback;
     }
 
+
+    /**
+     * 筛选用户
+     * @param sql
+     * @return
+     * @throws SQLException
+     */
+    public static Transfer filterUsers(String sql) throws SQLException {
+        Transfer feedback = new Transfer();
+        ResultSet rs = stat.executeQuery(sql);
+        List<User> users = new ArrayList<User>();
+        while (rs.next()){
+            users.add(
+                    new User(
+                            rs.getInt("id"),
+                            rs.getString("name"),
+                            rs.getString("gender"),
+                            rs.getString("contact"),
+                            rs.getString("email"),
+                            rs.getString("realname"),
+                            rs.getString("idcard"),
+                            rs.getString("certificate")
+                    )
+            );
+        }
+        feedback.setResult(SUCCESS);
+        feedback.setUserList(users);
+        return feedback;
+    }
+
 }

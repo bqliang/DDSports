@@ -128,6 +128,11 @@ public class ServerThread implements Runnable, Agreement {
                     break;
                 }
 
+                case FILTER_USERS:{
+                    feedback = DbHandler.filterUsers(receive.getSql());
+                    break;
+                }
+
                 default:{
 
                 }

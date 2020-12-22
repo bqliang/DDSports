@@ -34,6 +34,7 @@ public interface Agreement {
     int REVIEW_CERTIFICATE = 2005;
     int REVIEW_REPORT = 2006;
     int VIEW_CERTIFICATE_USERS = 2007;
+    int FILTER_USERS = 2008;
 
 
     /**

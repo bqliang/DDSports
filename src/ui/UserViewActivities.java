@@ -49,7 +49,11 @@ public class UserViewActivities extends JFrame implements Agreement {
         createActivityBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new CreateActivity(mySelf);
+                if(Logined.getUser().getCertificate().equals("审核通过")){
+                    new CreateActivity(mySelf);
+                }else {
+                    JOptionPane.showMessageDialog(null, "为保障用户安全，您必须通过实名认证后方可发起活动", "本账号暂时无法发起活动", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
         createActivityBtn.setFont(new Font("微软雅黑", Font.BOLD, 14));
@@ -111,6 +115,16 @@ public class UserViewActivities extends JFrame implements Agreement {
         toolBar.add(exitBtn);
 
         JButton helpBtn = new JButton("帮助", new ImageIcon(Tools.getImage("icons/help.png")));
+        helpBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    Desktop.getDesktop().browse(java.net.URI.create("https://support.qq.com/product/300612"));
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+            }
+        });
         helpBtn.setFont(new Font("微软雅黑", Font.BOLD, 14));
         helpBtn.setFocusPainted(false);
         toolBar.add(helpBtn);
@@ -125,7 +139,7 @@ public class UserViewActivities extends JFrame implements Agreement {
         contentPane.add(scrollPane);
 
         table =  new JTable();
-        table.addMouseListener(new MouseAdapter() {
+        table.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2){
@@ -137,6 +151,26 @@ public class UserViewActivities extends JFrame implements Agreement {
                         ioException.printStackTrace();
                     }
                 }
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
             }
         });
         scrollPane.setViewportView(table);
@@ -244,7 +278,7 @@ public class UserViewActivities extends JFrame implements Agreement {
         transfer.setCommand(VIEW_ACTIVITIES);
         Commit.set(transfer);
         Transfer feedback = Commit.start();
-        setData(feedback);
+        setData(feedback.getActivityList());
     }
 
     private void filterActivities(String sql) throws IOException, ClassNotFoundException {
@@ -253,22 +287,21 @@ public class UserViewActivities extends JFrame implements Agreement {
         transfer.setSql(sql);
         Commit.set(transfer);
         Transfer feedback = Commit.start();
-        setData(feedback);
+        setData(feedback.getActivityList());
     }
 
-    private void setData(Transfer feedback) {
-        List<Activity> activityList = feedback.getActivityList();
-        int numOfActivities = activityList.size();
-        String[][] data = new String[numOfActivities][6];
+
+    private void setData(List<Activity> activities) {
+        String[][] data = new String[activities.size()][6];
         List<Integer> idList = new ArrayList<>();
-        for(int i = 0; i < numOfActivities; i++){
-            idList.add(activityList.get(i).getId());
-            data[i][0] = activityList.get(i).getName();
-            data[i][1] = activityList.get(i).getPlace();
-            data[i][2] = activityList.get(i).getTime().toString().substring(0,16);
-            data[i][3] = String.valueOf(activityList.get(i).getRecruit());
-            data[i][4] = String.valueOf(activityList.get(i).getJoin());
-            data[i][5] = activityList.get(i).getStatus();
+        for(int i = 0; i < activities.size(); i++){
+            idList.add(activities.get(i).getId());
+            data[i][0] = activities.get(i).getName();
+            data[i][1] = activities.get(i).getPlace();
+            data[i][2] = activities.get(i).getTime().toString().substring(0,16);
+            data[i][3] = String.valueOf(activities.get(i).getRecruit());
+            data[i][4] = String.valueOf(activities.get(i).getJoin());
+            data[i][5] = activities.get(i).getStatus();
         }
         Logined.setIdList(idList);
 
@@ -282,6 +315,7 @@ public class UserViewActivities extends JFrame implements Agreement {
 //        DefaultTableModel dtm = new DefaultTableModel(data,new String []{"运动", "地点", "时间", "招募人数", "报名人数"});
 //        table.setModel(dtm);
     }
+
 
     private void search(){
         notStartCheckBox.setSelected(false);

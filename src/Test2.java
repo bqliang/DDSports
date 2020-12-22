@@ -1,11 +1,8 @@
-import ui.CreateActivity;
-import ui.Login;
-
-import java.sql.Timestamp;
+import ui.ActivitiesManage;
+import ui.CertificationManage;
 
 public class Test2 {
 
     public static void main(String[] args) {
-        new CreateActivity(new Login());
     }
 }

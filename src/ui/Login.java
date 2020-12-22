@@ -241,8 +241,8 @@ public class Login extends JFrame implements Agreement {
 				// 将登录成功的用户信息保存
 				Logined.setUser(feedback.getUser());
 			}else{
-				new AdminMain();
 				Logined.setAdmin(feedback.getAdmin());
+				new AdminMain();
 			}
 			// 销毁当前窗口
 			mySelf.dispose();
