@@ -66,9 +66,8 @@ public class CertificationManage extends JFrame implements Agreement {
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 2){
 					int selectRow = table.getSelectedRow();
-					int selectColumn = table.getSelectedColumn();
-					int selectId = Integer.parseInt((String) table.getValueAt(selectRow, selectColumn));
-
+					int selectId = Integer.parseInt((String) table.getValueAt(selectRow, 0));
+					new CertificationHandle(selectId, mySelf);
 				}
 			}
 

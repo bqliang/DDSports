@@ -20,6 +20,26 @@ public class User implements Serializable {
     public User(){
     }
 
+
+    /**
+     * 查看用
+     * @param id
+     */
+    public User(int id) {
+        this.id = id;
+    }
+
+
+    /**
+     * 用于设置认证状态
+     * @param id
+     * @param certificate
+     */
+    public User(int id, String certificate) {
+        this.id = id;
+        this.certificate = certificate;
+    }
+
     /**
      * 登录用
      * @param name

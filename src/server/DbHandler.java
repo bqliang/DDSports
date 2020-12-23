@@ -331,13 +331,12 @@ public class DbHandler implements Agreement {
                     new User(
                             user.getId(),
                             rs.getString("name"),
-                            " ",
-                            rs.getString("realname"),
-                            rs.getString("idcard"),
                             rs.getString("gender"),
                             rs.getString("contact"),
-                            rs.getString("certificate"),
-                            rs.getString("email")
+                            rs.getString("email"),
+                            rs.getString("realname"),
+                            rs.getString("idcard"),
+                            rs.getString("certificate")
                     )
             );
             feedback.setResult(SUCCESS);
@@ -577,6 +576,26 @@ public class DbHandler implements Agreement {
         }
         feedback.setResult(SUCCESS);
         feedback.setUserList(users);
+        return feedback;
+    }
+
+
+    /**
+     * 管理员设置用户的认证状态
+     * @param user
+     * @return
+     * @throws SQLException
+     */
+    public static Transfer setCertificateStatus(User user) throws SQLException {
+        Transfer feedback = new Transfer();
+        String sql = String.format("UPDATE user SET certificate = '%s' WHERE id = %d",
+                user.getCertificate(), user.getId());
+        int affectedRow = stat.executeUpdate(sql);
+        if (affectedRow == 1){
+            feedback.setResult(SUCCESS);
+        }else {
+            feedback.setResult(SET_CERTIFICATE_STATUS_FAIL);
+        }
         return feedback;
     }
 

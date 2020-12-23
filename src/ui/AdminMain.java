@@ -22,6 +22,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * @author bqliang
+ */
 public class AdminMain extends JFrame {
 
 	private JPanel contentPane;

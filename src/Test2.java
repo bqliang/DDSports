@@ -1,5 +1,4 @@
-import ui.ActivitiesManage;
-import ui.CertificationManage;
+import ui.CertificationHandle;
 
 public class Test2 {
 

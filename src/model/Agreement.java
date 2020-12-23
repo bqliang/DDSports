@@ -35,6 +35,7 @@ public interface Agreement {
     int REVIEW_REPORT = 2006;
     int VIEW_CERTIFICATE_USERS = 2007;
     int FILTER_USERS = 2008;
+    int SET_CERTIFICATE_STATUS = 2009;
 
 
     /**
@@ -69,4 +70,5 @@ public interface Agreement {
     int EXIT_ACTIVITY_FAIL = 4018;
     int NOT_YET_JOIN = 4019;
     int ALREADY_CHECK_IN = 4020;
+    int SET_CERTIFICATE_STATUS_FAIL = 4021;
 }

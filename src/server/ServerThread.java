@@ -133,6 +133,11 @@ public class ServerThread implements Runnable, Agreement {
                     break;
                 }
 
+                case SET_CERTIFICATE_STATUS:{
+                    feedback = DbHandler.setCertificateStatus(receive.getUser());
+                    break;
+                }
+
                 default:{
 
                 }
