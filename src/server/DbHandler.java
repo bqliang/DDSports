@@ -331,6 +331,7 @@ public class DbHandler implements Agreement {
                     new User(
                             user.getId(),
                             rs.getString("name"),
+                            rs.getString("password"),
                             rs.getString("gender"),
                             rs.getString("contact"),
                             rs.getString("email"),
@@ -595,6 +596,52 @@ public class DbHandler implements Agreement {
             feedback.setResult(SUCCESS);
         }else {
             feedback.setResult(SET_CERTIFICATE_STATUS_FAIL);
+        }
+        return feedback;
+    }
+
+
+    /**
+     * 管理员修改用户资料
+     * @param user
+     * @return
+     */
+    public static Transfer adminUpdateUserProfile(User user){
+        Transfer feedback = new Transfer();
+        int affectedRow = -1;
+        String sql = String.format("UPDATE user SET name = '%s', password = '%s', gender = '%s', contact = '%s', email = '%s', realname = '%s', idcard = '%s' WHERE id = %d",
+                user.getName(), user.getPw(), user.getGender(), user.getContact(), user.getEmail(), user.getRealName(), user.getIdCard(), user.getId());
+        try {
+            affectedRow = stat.executeUpdate(sql);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        if (affectedRow == 1){
+            feedback.setResult(SUCCESS);
+        }else {
+            feedback.setResult(ADMIN_UPDATE_USER_PROFILE_FAIL);
+        }
+        return feedback;
+    }
+
+    /**
+     * 管理员删除用户
+     * @param user
+     * @return
+     */
+    public static Transfer deleteUser(User user){
+        Transfer feedback = new Transfer();
+        int affectedRow = -1;
+        String sql = String.format("DELETE FROM user WHERE id = %d", user.getId());
+        try {
+            affectedRow = stat.executeUpdate(sql);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        if (affectedRow == 1){
+            feedback.setResult(SUCCESS);
+        }else {
+            feedback.setResult(DELETE_USER_FAIL);
         }
         return feedback;
     }

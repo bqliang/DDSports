@@ -60,6 +60,36 @@ public class UsersManage extends JFrame implements Agreement {
 		contentPane.add(scrollPane);
 		
 		table = new JTable();
+		table.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount() == 2){
+					int selectRow = table.getSelectedRow();
+					int id = Integer.parseInt((String) table.getValueAt(selectRow, 0));
+					new AdminViewUserDetails(id, mySelf);
+				}
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+
+			}
+		});
 		scrollPane.setViewportView(table);
 		
 		headpanel = new JPanel();

@@ -36,6 +36,7 @@ public interface Agreement {
     int VIEW_CERTIFICATE_USERS = 2007;
     int FILTER_USERS = 2008;
     int SET_CERTIFICATE_STATUS = 2009;
+    int ADMIN_UPDATE_USER_PROFILE =2010;
 
 
     /**
@@ -71,4 +72,6 @@ public interface Agreement {
     int NOT_YET_JOIN = 4019;
     int ALREADY_CHECK_IN = 4020;
     int SET_CERTIFICATE_STATUS_FAIL = 4021;
+    int ADMIN_UPDATE_USER_PROFILE_FAIL =4022;
+    int DELETE_USER_FAIL = 4023;
 }

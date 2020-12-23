@@ -138,6 +138,16 @@ public class ServerThread implements Runnable, Agreement {
                     break;
                 }
 
+                case ADMIN_UPDATE_USER_PROFILE:{
+                    feedback = DbHandler.adminUpdateUserProfile(receive.getUser());
+                    break;
+                }
+
+                case DELETE_USER:{
+                    feedback = DbHandler.deleteUser(receive.getUser());
+                    break;
+                }
+
                 default:{
 
                 }
