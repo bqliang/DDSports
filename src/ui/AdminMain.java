@@ -2,6 +2,7 @@ package ui;
 
 import client.Logined;
 import client.Tools;
+import model.User;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
@@ -49,6 +50,12 @@ public class AdminMain extends JFrame {
 		panel.setLayout(new GridLayout(1, 3, 5, 5));
 		
 		JButton usersManageBtn = new JButton("用户管理");
+		usersManageBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new UsersManage(mySelf);
+			}
+		});
 		usersManageBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {

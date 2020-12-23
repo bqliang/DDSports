@@ -1,23 +1,16 @@
 package ui;
 
 import client.Commit;
-import client.Logined;
+import client.Tools;
 import model.Activity;
 import model.Agreement;
 import model.Transfer;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JToolBar;
 import javax.swing.JButton;
 import java.awt.Color;
-import javax.swing.SwingConstants;
-import javax.swing.JScrollBar;
-import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
 import java.awt.Insets;
@@ -25,11 +18,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import java.awt.Font;
-import javax.swing.UIManager;
 import javax.swing.JCheckBox;
 import java.awt.event.*;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -58,6 +49,7 @@ public class ActivitiesManage extends JFrame implements Agreement {
 			}
 		});
 		setTitle("活动管理");
+		setIconImage(Tools.getImage("icons/basketball.png"));
 		setBounds(100, 100, 640, 410);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
@@ -75,7 +67,9 @@ public class ActivitiesManage extends JFrame implements Agreement {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 2){
-
+					int selecRow = table.getSelectedRow();
+					int id = Integer.parseInt((String) table.getValueAt(selecRow, 0));
+					new AdminViewActivityDetails(id, mySelf);
 				}
 			}
 		});
