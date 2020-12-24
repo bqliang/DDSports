@@ -178,7 +178,6 @@ public class DbHandler implements Agreement {
      */
     public static Transfer authenticate (User user) throws SQLException {
         Transfer feedback = new Transfer();
-        System.out.println(String.format("UPDATE user SET realname = '%s', idcard = '%s', certificate = '审核中' WHERE id = %d", user.getRealName(), user.getIdCard(), user.getId()));
         int affectedRow = stat.executeUpdate(String.format("UPDATE user SET realname = '%s', idcard = '%s', certificate = '审核中' WHERE id = %d", user.getRealName(), user.getIdCard(), user.getId()));
         if (affectedRow == 1){
             feedback.setResult(SUCCESS);
@@ -207,7 +206,6 @@ public class DbHandler implements Agreement {
             rs.next();
             int id = rs.getInt("id");
             rs.next();
-            System.out.println(id);
             String setStatus = "CREATE EVENT set%sStatus%d\n" +
                     "    ON SCHEDULE AT '%s'\n" +
                     "    DO\n" +
@@ -492,7 +490,6 @@ public class DbHandler implements Agreement {
     public static Transfer editProfile(User user) throws SQLException {
         Transfer feedback = new Transfer();
         String sql = "UPDATE user SET gender = '%s', contact = '%s', email = '%s' WHERE id = %d";
-        System.out.println(String.format(sql, user.getGender(), user.getContact(), user.getEmail(), user.getId()));
         int affectedRow = stat.executeUpdate(String.format(sql, user.getGender(), user.getContact(), user.getEmail(), user.getId()));
         if (affectedRow == 1){
             feedback.setResult(SUCCESS);
